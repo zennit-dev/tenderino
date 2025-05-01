@@ -14,8 +14,8 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.serializers import Serializer
 
-from accounts.models import User, UserPermissions, UserStatus
-from accounts.serializers import UserSerializer
+from accounts.models import User, UserPermissions, UserStatus, UserApplication
+from accounts.serializers import UserSerializer, UserApplicationSerializer
 from provider.custom_functions import generate_temp_login_id, send_email_function
 from provider.minxin import CanManageUsers, PermissionPolicyMixin
 from provider.settings import ACME_DOMAIN
@@ -76,6 +76,35 @@ class UserViewSet(viewsets.ModelViewSet, PermissionPolicyMixin):
         user.save()
 
 
+class UserApplicationViewSet(viewsets.ModelViewSet, PermissionPolicyMixin):
+    serializer_class = UserApplicationSerializer
+    permission_classes_per_method = {
+        "retrieve": [IsAuthenticated],
+        "list": [IsAuthenticated],
+        "create": [AllowAny],
+        "update": [CanManageUsers],
+        "partial_update": [CanManageUsers],
+        "destroy": [CanManageUsers],
+    }
+    pagination_class = QuerySetPagination
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.access == UserPermissions.ADMIN:
+            return UserApplication.objects.all().order_by("-created_at")
+        elif user.access == UserPermissions.STAFF:
+            return UserApplication.objects.filter(status=UserStatus.PENDING).order_by("-created_at")
+        else:
+            return UserApplication.objects.filter(user=user).order_by("-created_at")
+
+    def perform_create(self, serializer):
+        if self.request.user.is_authenticated:
+            serializer.save(user=self.request.user)
+        else:
+            # For new users, we'll create the application first
+            serializer.save()
+
+
 class SignIn(ObtainAuthToken):
     permission_classes = [AllowAny]
 
@@ -85,6 +114,12 @@ class SignIn(ObtainAuthToken):
         response = super().post(request, *args, **kwargs)
         token = Token.objects.get(key=response.data["token"])
         user = User.objects.get(id=token.user_id)
+
+        if not user.is_active:
+            return Response(
+                {"message": "Your account is pending approval."},
+                status=status.HTTP_403_FORBIDDEN
+            )
 
         return Response(
             {"token": token.key, "access": user.access},
@@ -111,21 +146,39 @@ class SignUp(CreateAPIView):
     def post(self, request: Request, *args: Any, **kwargs: Any) -> Response:
         data = request.data.copy()
         password = request.data.get("password")
+        application_data = request.data.get("application")
 
+        if not application_data:
+            return Response(
+                {"message": "Application details are required."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        # Create user with inactive status
         data["access"] = UserPermissions.USER
         data["status"] = UserStatus.PENDING
+        data["is_active"] = False
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
-
         user = serializer.save()
         user.set_password(password)
         user.save()
+
+        # Create application
+        application_serializer = UserApplicationSerializer(data=application_data)
+        application_serializer.is_valid(raise_exception=True)
+        application_serializer.save(user=user)
 
         user_data = UserSerializer(user).data
         token, created = Token.objects.get_or_create(user_id=user_data.get("id"))
 
         return Response(
-            {"user": user_data, "token": token.key}, status=status.HTTP_201_CREATED
+            {
+                "message": "Account created successfully. Please wait for admin approval.",
+                "user": user_data,
+                "token": token.key
+            },
+            status=status.HTTP_201_CREATED
         )
 
 

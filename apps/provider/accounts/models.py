@@ -73,6 +73,24 @@ class UserManager(BaseUserManager):
         return user
 
 
+class UserApplication(models.Model):
+    name = models.CharField(max_length=50)
+    surname = models.CharField(max_length=50)
+    business_name = models.CharField(max_length=100)
+    nipt = models.CharField(max_length=20, unique=True)  # Document number
+    phone_number = models.CharField(max_length=15)
+    user = models.OneToOneField('User', on_delete=models.CASCADE, related_name='application')
+    created_at = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(
+        max_length=9,
+        choices=UserStatus.choices,
+        default=UserStatus.PENDING
+    )
+
+    def __str__(self) -> str:
+        return f"{self.business_name} - {self.nipt}"
+
+
 class User(AbstractBaseUser, PermissionsMixin):
     name = models.CharField(max_length=50, null=True, blank=True)
     access = models.CharField(
@@ -85,7 +103,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     )
     is_superuser = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=False)
 
     temp_login_id = models.CharField(max_length=255, null=True, blank=True)
 
@@ -95,4 +113,4 @@ class User(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = ["password"]
 
     def __str__(self) -> str:
-        return f"{self.id} - {self.username} - {self.email}"
+        return f"{self.id} - {self.name} - {self.email}"
