@@ -23,7 +23,7 @@ class UserApplicationSerializer(serializers.ModelSerializer):
             "status",
             "created_at",
         )
-        read_only_fields = ("status", "created_at")
+        read_only_fields = ("created_at",)
 
     def create(self, validated_data):
         # Hash the password before saving
