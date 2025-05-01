@@ -22,8 +22,9 @@ def user_dir_path(instance, filename: str) -> str:
 
 
 class UserPermissions(models.TextChoices):
-    SUPERUSER = "Superuser", _("Superuser")
-    RECEPTIONIST = "Receptionist", _("Receptionist")
+    USER = "User", _("User")
+    STAFF = "Staff", _("Staff")
+    ADMIN = "Admin", _("Admin")
 
 
 class UserStatus(models.TextChoices):
@@ -37,7 +38,7 @@ class UserManager(BaseUserManager):
         self,
         email: str,
         password: str,
-        access: str = UserPermissions.SUPERUSER,
+        access: str = UserPermissions.ADMIN,
     ) -> "User":
         return self.create_user(
             email,
@@ -53,7 +54,7 @@ class UserManager(BaseUserManager):
         password: str,
         is_superuser: bool = False,
         is_staff: bool = False,
-        access: str = UserPermissions.RECEPTIONIST,
+        access: str = UserPermissions.USER,
         status: str = UserStatus.ACTIVE,
         is_active: bool = True,
     ) -> "User":
@@ -73,27 +74,11 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    username = models.CharField(max_length=50, null=True, blank=True)
-    firstName = models.CharField(max_length=50, null=True, blank=True)
-    lastName = models.CharField(max_length=50, null=True, blank=True)
-    phone = models.CharField(max_length=15, null=True, blank=True)
-    email = models.EmailField(unique=True, max_length=255)
-    avatar = models.ImageField(
-        upload_to=user_dir_path,
-        null=True,
-        blank=True,
-        validators=[validators.validate_img_extension],
-    )
-    jobTitle = models.CharField(max_length=50, null=True, blank=True)
-    address = models.CharField(max_length=255, null=True, blank=True)
-    city = models.CharField(max_length=50, null=True, blank=True)
-    country = models.CharField(max_length=50, null=True, blank=True)
-    zipCode = models.CharField(max_length=10, null=True, blank=True)
-    bio = models.TextField(null=True, blank=True)
+    name = models.CharField(max_length=50, null=True, blank=True)
     access = models.CharField(
         max_length=12,
         choices=UserPermissions.choices,
-        default=UserPermissions.RECEPTIONIST,
+        default=UserPermissions.USER,
     )
     status = models.CharField(
         max_length=9, choices=UserStatus.choices, default=UserStatus.PENDING

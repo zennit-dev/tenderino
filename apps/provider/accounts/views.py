@@ -56,13 +56,15 @@ class UserViewSet(viewsets.ModelViewSet, PermissionPolicyMixin):
     def get_queryset(self):
         user = self.request.user
         queryset = User.objects.all().order_by("id")
-        fullName = self.request.query_params.get("fullName")
+        name = self.request.query_params.get("name")
 
-        if fullName:
-            queryset = queryset.filter(firstName__contains=fullName)
+        if name:
+            queryset = queryset.filter(name__contains=name)
 
-        if user.access == UserPermissions.SUPERUSER:
+        if user.access == UserPermissions.ADMIN:
             return User.objects.all().order_by("id")
+        elif user.access == UserPermissions.STAFF:
+            return User.objects.filter(access=UserPermissions.USER).order_by("id")
         else:
             return User.objects.filter(id=user.id).order_by("id")
 
@@ -110,7 +112,7 @@ class SignUp(CreateAPIView):
         data = request.data.copy()
         password = request.data.get("password")
 
-        data["access"] = UserPermissions.RECEPTIONIST
+        data["access"] = UserPermissions.USER
         data["status"] = UserStatus.PENDING
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
