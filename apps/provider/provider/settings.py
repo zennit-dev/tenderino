@@ -34,9 +34,6 @@ env = environ.Env(
     CSRF_TRUSTED_ORIGINS=(str, "http://localhost:3000"),
     CORS_ALLOWED_ORIGINS=(str, "http://localhost:3000"),
     ACME_DOMAIN=(str, "localhost"),
-    TWILIO_ACCOUNT_SID=(str, "insecure"),
-    TWILIO_AUTH_TOKEN=(str, "insecure"),
-    TWILIO_MESSAGING_SERVICE_SID=(str, "insecure"),
 )
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.

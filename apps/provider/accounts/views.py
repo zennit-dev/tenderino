@@ -1,6 +1,6 @@
 from typing import Any, Dict, Tuple
 
-from django.contrib.auth.hashers import check_password
+from django.contrib.auth.hashers import check_password, make_password
 from django.db.models import QuerySet
 from django.http import JsonResponse
 from django.utils import timezone
@@ -14,11 +14,10 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.serializers import Serializer
 
-from accounts.models import User, UserPermissions, UserStatus, UserApplication
-from accounts.serializers import UserSerializer, UserApplicationSerializer
+from accounts.models import User, UserApplication, UserPermissions, UserStatus
+from accounts.serializers import UserApplicationSerializer, UserSerializer
 from provider.custom_functions import generate_temp_login_id, send_email_function
 from provider.minxin import CanManageUsers, PermissionPolicyMixin
-from provider.settings import ACME_DOMAIN
 from provider.views import QuerySetPagination
 
 
@@ -93,16 +92,45 @@ class UserApplicationViewSet(viewsets.ModelViewSet, PermissionPolicyMixin):
         if user.access == UserPermissions.ADMIN:
             return UserApplication.objects.all().order_by("-created_at")
         elif user.access == UserPermissions.STAFF:
-            return UserApplication.objects.filter(status=UserStatus.PENDING).order_by("-created_at")
+            return UserApplication.objects.filter(status=UserStatus.PENDING).order_by(
+                "-created_at"
+            )
         else:
-            return UserApplication.objects.filter(user=user).order_by("-created_at")
+            return UserApplication.objects.none()
 
-    def perform_create(self, serializer):
-        if self.request.user.is_authenticated:
-            serializer.save(user=self.request.user)
-        else:
-            # For new users, we'll create the application first
-            serializer.save()
+    def perform_update(self, serializer):
+        application = serializer.save()
+
+        # If application is approved, create the user
+        if application.status == UserStatus.ACTIVE:
+            # Check if user already exists
+            if User.objects.filter(email=application.email).exists():
+                raise ValidationError("A user with this email already exists.")
+
+            # Create the user
+            user = User.objects.create(
+                name=f"{application.name} {application.surname}",
+                email=application.email,
+                access=UserPermissions.USER,
+                status=UserStatus.ACTIVE,
+                is_active=True,
+            )
+            user.set_password(application.password)
+            user.save()
+
+            # Send email notification
+            data = {
+                "name": application.name,
+                "email": application.email,
+                "timestamp": timezone.now().strftime("%d-%m-%Y | %H:%M"),
+            }
+            try:
+                template_html = "emails/html/application_approved.html"
+                template_txt = "emails/txt/application_approved.txt"
+                send_email_function(None, user, data, template_html, template_txt)
+            except Exception as e:
+                # Log the error but don't fail the request
+                print(f"Failed to send email: {str(e)}")
 
 
 class SignIn(ObtainAuthToken):
@@ -114,12 +142,6 @@ class SignIn(ObtainAuthToken):
         response = super().post(request, *args, **kwargs)
         token = Token.objects.get(key=response.data["token"])
         user = User.objects.get(id=token.user_id)
-
-        if not user.is_active:
-            return Response(
-                {"message": "Your account is pending approval."},
-                status=status.HTTP_403_FORBIDDEN
-            )
 
         return Response(
             {"token": token.key, "access": user.access},
@@ -176,9 +198,9 @@ class SignUp(CreateAPIView):
             {
                 "message": "Account created successfully. Please wait for admin approval.",
                 "user": user_data,
-                "token": token.key
+                "token": token.key,
             },
-            status=status.HTTP_201_CREATED
+            status=status.HTTP_201_CREATED,
         )
 
 
@@ -202,7 +224,6 @@ class ResetPassword(UpdateAPIView):
         user.save()
         data = {
             "username": user.email,
-            "acme_domain": ACME_DOMAIN,
             "timestamp": timezone.now().strftime("%d-%m-%Y | %H:%M"),
         }
         try:
@@ -272,4 +293,51 @@ class ChangePassword(UpdateAPIView):
 
         return Response(
             {"message": "Password changed successfully."}, status=status.HTTP_200_OK
+        )
+
+
+class CreateApplication(CreateAPIView):
+    serializer_class = UserApplicationSerializer
+    permission_classes = [AllowAny]
+
+    def post(self, request: Request, *args: Any, **kwargs: Any) -> Response:
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        # Check if email already exists in applications or users
+        email = request.data.get("email")
+        if UserApplication.objects.filter(email=email).exists():
+            return Response(
+                {"message": "An application with this email already exists."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        if User.objects.filter(email=email).exists():
+            return Response(
+                {"message": "A user with this email already exists."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        application = serializer.save()
+
+        # Send confirmation email
+        data = {
+            "name": application.name,
+            "email": application.email,
+            "business_name": application.business_name,
+            "timestamp": timezone.now().strftime("%d-%m-%Y | %H:%M"),
+        }
+        try:
+            template_html = "emails/html/application_submitted.html"
+            template_txt = "emails/txt/application_submitted.txt"
+            send_email_function(None, application, data, template_html, template_txt)
+        except Exception as e:
+            # Log the error but don't fail the request
+            print(f"Failed to send email: {str(e)}")
+
+        return Response(
+            {
+                "message": "Application submitted successfully. You will be notified once it's approved.",
+                "application": serializer.data,
+            },
+            status=status.HTTP_201_CREATED,
         )

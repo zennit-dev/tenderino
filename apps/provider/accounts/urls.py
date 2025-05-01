@@ -3,6 +3,7 @@ from rest_framework import routers
 
 from accounts.views import (
     ChangePassword,
+    CreateApplication,
     CurrentUser,
     RequestResetPassword,
     ResetPassword,
@@ -37,6 +38,6 @@ urlpatterns = [
     ),
     # Total users
     path("total-users/", get_total_users, name="total-users"),
+    path("apply/", CreateApplication.as_view(), name="create-application"),
 ]
-
 urlpatterns += router.urls

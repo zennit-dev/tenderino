@@ -79,12 +79,13 @@ class UserApplication(models.Model):
     business_name = models.CharField(max_length=100)
     nipt = models.CharField(max_length=20, unique=True)  # Document number
     phone_number = models.CharField(max_length=15)
-    user = models.OneToOneField('User', on_delete=models.CASCADE, related_name='application')
+    email = models.EmailField(unique=True, max_length=255)
+    password = models.CharField(
+        max_length=255
+    )  # Will be used to create user after approval
     created_at = models.DateTimeField(auto_now_add=True)
     status = models.CharField(
-        max_length=9,
-        choices=UserStatus.choices,
-        default=UserStatus.PENDING
+        max_length=9, choices=UserStatus.choices, default=UserStatus.PENDING
     )
 
     def __str__(self) -> str:
@@ -93,17 +94,18 @@ class UserApplication(models.Model):
 
 class User(AbstractBaseUser, PermissionsMixin):
     name = models.CharField(max_length=50, null=True, blank=True)
+    email = models.EmailField(unique=True, max_length=255)
     access = models.CharField(
         max_length=12,
         choices=UserPermissions.choices,
         default=UserPermissions.USER,
     )
     status = models.CharField(
-        max_length=9, choices=UserStatus.choices, default=UserStatus.PENDING
+        max_length=9, choices=UserStatus.choices, default=UserStatus.ACTIVE
     )
     is_superuser = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
 
     temp_login_id = models.CharField(max_length=255, null=True, blank=True)
 
