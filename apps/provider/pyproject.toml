@@ -1,0 +1,32 @@
+[tool.black]
+exclude = '''(
+    .*/\.venv/.*
+)'''
+
+[tool.isort]
+profile = "black"
+
+[tool.mypy]
+plugins = ["mypy_django_plugin.main"]
+exclude = '''(
+/venv/|
+\.venv/|
+/usr/|
+\.local/|
+tests.py
+)'''
+follow_imports = "skip"
+ignore_missing_imports = true
+disallow_untyped_calls = true
+disallow_untyped_defs = true
+
+[tool.django-stubs]
+django_settings_module = "provider.settings"
+
+[tool.pyright]
+venv = ".venv"
+venvPath = "./"
+
+[tool.coverage.report]
+show_missing = true
+omit = ["*checks.py", "manage.py"]
