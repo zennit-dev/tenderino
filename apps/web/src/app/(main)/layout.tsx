@@ -15,7 +15,7 @@ export default ({
     <main className="flex flex-row items-center size-full">
       {navigation}
       <section className={"grow h-full flex flex-col"}>
-        <nav className={"h-12 w-full"} />
+        <nav className={"h-12 w-full min-h-12"} />
         <section
           className={"rounded-tl-lg bg-background grow w-full shadow-lg p-4"}
         >

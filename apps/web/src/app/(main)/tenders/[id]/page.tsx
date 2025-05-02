@@ -5,7 +5,7 @@ import {
   UsersIcon,
 } from "@zennui/icons";
 import { Button } from "@zennui/web/button";
-
+import type { DynamicSegmentProps } from "@zenncore/types/navigation";
 const submissionRequirements = [
   "Technical Specification",
   "Price Quote",
@@ -29,15 +29,11 @@ const tenderDocuments = [
   },
 ];
 
-export default async ({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) => {
+export default async ({ params }: DynamicSegmentProps) => {
   const { id } = await params;
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full overflow-x-hidden overflow-y-auto">
       <div className="flex px-4 flex-col gap-4 border-b border-border">
         <div className="flex gap-4 items-center pb-4">
           <div>
