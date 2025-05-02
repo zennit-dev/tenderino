@@ -1,12 +1,18 @@
 "use client";
 import { Sidebar, SidebarBody, SidebarLink } from "@/components/sidebar";
-import { ArrowLeftIcon, SettingsIcon } from "@zennui/icons";
+import { ArrowLeftIcon, SettingsIcon, ShopIcon } from "@zennui/icons";
 import { motion } from "motion/react";
+import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
 
 export default () => {
   const links = [
+    {
+      label: "Tenders",
+      href: "/tenders",
+      icon: <ShopIcon className="h-5 w-5 shrink-0" />,
+    },
     {
       label: "Settings",
       href: "#",
@@ -26,7 +32,7 @@ export default () => {
           {open ? <Logo /> : <LogoIcon />}
           <div className="mt-8 flex flex-col gap-2">
             {links.map((link) => (
-              <SidebarLink key={link.href} link={link} />
+              <SidebarLink key={link.label} link={link} />
             ))}
           </div>
         </div>

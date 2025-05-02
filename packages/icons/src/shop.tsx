@@ -6,17 +6,11 @@ type IconProps = SVGProps<SVGSVGElement> & {
   title?: string;
 };
 
-export const CalendarIcon = ({ ...props }: IconProps) => (
+export const ShopIcon = ({ ...props }: IconProps) => (
   <svg height="18" width="18" viewBox="0 0 18 18" {...props}>
     <g fill="#212121">
       <path
-        d="M2.25 4.75C2.25 3.64543 3.14543 2.75 4.25 2.75H13.75C14.8546 2.75 15.75 3.64543 15.75 4.75V6.25H2.25V4.75Z"
-        fill="#212121"
-        fillOpacity=".3"
-        stroke="none"
-      />
-      <path
-        d="M5.75 2.75V0.75"
+        d="M3.75 16.25L3.75 9.5"
         fill="none"
         stroke="#212121"
         strokeLinecap="round"
@@ -24,7 +18,7 @@ export const CalendarIcon = ({ ...props }: IconProps) => (
         strokeWidth="1.5"
       />
       <path
-        d="M12.25 2.75V0.75"
+        d="M14.25 9.5L14.25 16.25"
         fill="none"
         stroke="#212121"
         strokeLinecap="round"
@@ -32,7 +26,7 @@ export const CalendarIcon = ({ ...props }: IconProps) => (
         strokeWidth="1.5"
       />
       <path
-        d="M13.75 2.75H4.25C3.14543 2.75 2.25 3.64543 2.25 4.75V13.25C2.25 14.3546 3.14543 15.25 4.25 15.25H13.75C14.8546 15.25 15.75 14.3546 15.75 13.25V4.75C15.75 3.64543 14.8546 2.75 13.75 2.75Z"
+        d="M13.668,1.75H4.331c-.359,0-.691,.193-.869,.505l-1.706,2.995c.475,1.031,1.51,1.75,2.72,1.75,.908,0,1.712-.412,2.262-1.049,.55,.637,1.354,1.049,2.262,1.049s1.711-.411,2.261-1.048c.55,.637,1.354,1.048,2.261,1.048,1.209,0,2.245-.719,2.72-1.75l-1.704-2.995c-.178-.312-.51-.505-.869-.505Z"
         fill="none"
         stroke="#212121"
         strokeLinecap="round"
@@ -40,7 +34,15 @@ export const CalendarIcon = ({ ...props }: IconProps) => (
         strokeWidth="1.5"
       />
       <path
-        d="M2.25 6.25H15.75"
+        d="M7.25,16v-3c0-.966,.784-1.75,1.75-1.75h0c.966,0,1.75,.784,1.75,1.75v3"
+        fill="none"
+        stroke="#212121"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.5"
+      />
+      <path
+        d="M1.75 16.25L16.25 16.25"
         fill="none"
         stroke="#212121"
         strokeLinecap="round"
