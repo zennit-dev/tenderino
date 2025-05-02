@@ -6,7 +6,11 @@ export const metadata: Metadata = {
   description: "aadf",
 };
 
-export default ({ children, navigation }: LayoutProps<"navigation">) => {
+export default ({
+  children,
+  navigation,
+  action,
+}: LayoutProps<"navigation" | "action">) => {
   return (
     <main className="flex flex-row items-center">
       {navigation}
@@ -18,6 +22,7 @@ export default ({ children, navigation }: LayoutProps<"navigation">) => {
           {children}
         </section>
       </section>
+      {action}
     </main>
   );
 };
