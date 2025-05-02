@@ -32,6 +32,7 @@ export * from "./edit";
 export * from "./electric-plug";
 export * from "./eye";
 export * from "./eye-closed";
+export * from "./file-content";
 export * from "./file-send";
 export * from "./filter";
 export * from "./folder-open";

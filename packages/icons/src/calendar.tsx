@@ -6,47 +6,22 @@ type IconProps = SVGProps<SVGSVGElement> & {
   title?: string;
 };
 
-export const CalendarIcon = ({ ...props }: IconProps) => (
-  <svg height="18" width="18" viewBox="0 0 18 18" {...props}>
-    <g fill="#212121">
-      <path
-        d="M2.25 4.75C2.25 3.64543 3.14543 2.75 4.25 2.75H13.75C14.8546 2.75 15.75 3.64543 15.75 4.75V6.25H2.25V4.75Z"
-        fill="#212121"
-        fillOpacity=".3"
-        stroke="none"
-      />
-      <path
-        d="M5.75 2.75V0.75"
-        fill="none"
-        stroke="#212121"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="1.5"
-      />
-      <path
-        d="M12.25 2.75V0.75"
-        fill="none"
-        stroke="#212121"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="1.5"
-      />
-      <path
-        d="M13.75 2.75H4.25C3.14543 2.75 2.25 3.64543 2.25 4.75V13.25C2.25 14.3546 3.14543 15.25 4.25 15.25H13.75C14.8546 15.25 15.75 14.3546 15.75 13.25V4.75C15.75 3.64543 14.8546 2.75 13.75 2.75Z"
-        fill="none"
-        stroke="#212121"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="1.5"
-      />
-      <path
-        d="M2.25 6.25H15.75"
-        fill="none"
-        stroke="#212121"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="1.5"
-      />
-    </g>
-  </svg>
-);
+export const CalendarIcon = ({ ...props }: IconProps) => {
+  return (
+    <svg height="18" width="18" viewBox="0 0 18 18" {...props}>
+      <g>
+        <path
+          d="M1.5 4.75C1.5 3.23128 2.73069 2 4.25 2H13.75C15.2693 2 16.5 3.23128 16.5 4.75V13.25C16.5 14.7687 15.2693 16 13.75 16H4.25C2.73069 16 1.5 14.7687 1.5 13.25V4.75Z"
+          fillOpacity=".4"
+          fillRule="evenodd"
+        />
+        <path
+          d="M6.5 0.75C6.5 0.335786 6.16421 0 5.75 0C5.33579 0 5 0.335786 5 0.75V2H4.25C2.73079 2 1.5 3.23079 1.5 4.75V6H16.5V4.75C16.5 3.23079 15.2692 2 13.75 2H13V0.75C13 0.335786 12.6642 0 12.25 0C11.8358 0 11.5 0.335786 11.5 0.75V2H6.5V0.75Z"
+          fillRule="evenodd"
+        />
+      </g>
+    </svg>
+  );
+};
+
+export default CalendarIcon;
