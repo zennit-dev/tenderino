@@ -111,7 +111,7 @@ export const InferredForm = <
 };
 
 export const FormSubmitButton = ({
-  variant = "flat",
+  variant = "default",
   color = "emphasis",
   children,
   ...props
