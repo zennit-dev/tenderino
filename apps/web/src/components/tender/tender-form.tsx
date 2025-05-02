@@ -10,30 +10,70 @@ import {
 } from "@zennui/web/form";
 import { Tabs, TabsContent } from "@zennui/web/tabs";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { z } from "zod";
 import { v4 as uuid } from "uuid";
+import { AIButton } from "../ai-button";
+import { generateCriteria } from "@/server/tender";
 
 export const TenderForm = () => {
   const router = useRouter();
 
   const [active, setActive] = useState("general");
+  const [form, setForm] = useState<{
+    general: InferredFormFields<typeof general> | null;
+    requirments: InferredFormFields<typeof requirment>[];
+    documents: InferredFormFields<typeof document> | null;
+  }>({
+    general: null,
+    requirments: [],
+    documents: null,
+  });
+  const [transition, startTransition] = useTransition();
 
   const handleGeneralSubmit = (data: InferredFormFields<typeof general>) => {
     setActive("requirments");
+    setForm({
+      ...form,
+      general: data,
+    });
   };
 
   const handleRequirmentSubmit = (
     data: InferredFormFields<typeof requirment>
   ) => {
     setActive("documents");
+    setForm({
+      ...form,
+      requirments: [...form.requirments, data],
+    });
   };
 
   const handleDocumentSubmit = (data: InferredFormFields<typeof document>) => {
     console.log(data);
+    setForm({
+      ...form,
+      documents: data,
+    });
   };
 
-  const [requirments, setRequirments] = useState<string[]>([uuid()]);
+  const handleAIGeneration = async () => {
+    if (!form.general) return;
+    const criteria = await generateCriteria({
+      title: form.general.title,
+      description: form.general.description,
+    });
+
+    setForm({
+      ...form,
+      requirments: criteria.map((c) => ({
+        ...c,
+        type: "description",
+        id: uuid(),
+      })),
+    });
+  };
+
   return (
     <section className="size-full">
       <div>
@@ -55,23 +95,44 @@ export const TenderForm = () => {
             </FormSubmitButton>
           </InferredForm>
         </TabsContent>
-        <TabsContent value="requirments" className="flex flex-col gap-4">
-          {requirments.map((id) => (
-            <div key={id}>
+        <TabsContent value="requirments" className="flex flex-col gap-4 py-4">
+          {form.requirments.map((value) => (
+            <div key={value.title}>
               <InferredForm
                 config={requirment}
+                defaultValues={value}
                 onSubmit={handleRequirmentSubmit}
               />
             </div>
           ))}
           <Button
-            onClick={() => setRequirments([...requirments, uuid()])}
+            onClick={() =>
+              setForm({
+                ...form,
+                requirments: [
+                  ...form.requirments,
+                  {
+                    title: "New Requirment",
+                    type: "description",
+                    description: "New Requirment",
+                    weight: 0,
+                  },
+                ],
+              })
+            }
             variant={"soft"}
             className="w-full"
           >
             <PlusCircleIcon />
             Add Requirment
           </Button>
+          <AIButton
+            className="w-full"
+            onClick={() => startTransition(handleAIGeneration)}
+            disabled={transition}
+          >
+            {transition ? "Generating..." : "Generate with AI"}
+          </AIButton>
           <Button className="ml-auto">
             <LogInIcon />
             Continue to Documents
