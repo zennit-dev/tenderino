@@ -50,7 +50,7 @@ export default () => {
       <p>Browse and apply for available procurement opportunities</p>
       <div className="flex gap-2">
         <Input placeholder="SearchTender" />
-        <Button>
+        <Button className="px-4" color="accent">
           <FilterIcon />
           Filter
         </Button>
