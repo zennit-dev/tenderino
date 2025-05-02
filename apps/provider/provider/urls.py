@@ -18,6 +18,7 @@ if settings.DEBUG:
 urlpatterns += [
     path("admin/", admin.site.urls),
     path("accounts/", include("accounts.urls")),
+    path("", include("tenders.urls")),
     # App URLs
     # Documentation API
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
