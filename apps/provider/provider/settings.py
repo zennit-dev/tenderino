@@ -67,6 +67,7 @@ INSTALLED_APPS = [
     "drf_spectacular",
     # Apps
     "accounts",
+    "tenders",
 ]
 
 APPEND_SLASH = False
