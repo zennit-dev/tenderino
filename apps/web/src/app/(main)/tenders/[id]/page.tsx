@@ -115,7 +115,7 @@ export default async ({ params }: DynamicSegmentProps) => {
           </div>
         </div>
         <div className=" mt-8 h-fit pl-4 py-2 space-y-2">
-          <h2>Tender Details</h2>
+          <h2 className="font-bold text-xl">Tender Details</h2>
           <div className="divide-y divide-border gap-2 flex flex-col">
             <div className="flex gap-3 items-center pb-2 pr-10">
               <CalendarIcon className="w-7 h-7 fill-red-500" />
