@@ -13,7 +13,7 @@ export const buttonVariants = cva(
         primary:
           "group gap-1.5 bg-gray-900 transition-all duration-300 ease-in-out [background-image:radial-gradient(76%_151%_at_52%_-52%,rgba(255,255,255,0.9)_0%,transparent_100%)] [box-shadow:rgba(255,255,255,0.3)_0px_1px_0px_0px_inset,theme(colors.gray.950)_0px_0px_0px_1px] hover:brightness-125 focus-visible:outline active:brightness-95 disabled:bg-gray-200 disabled:from-gray-100 disabled:to-gray-100 disabled:text-gray-400 disabled:shadow-none disabled:hover:brightness-100 dark:border-gray-300 dark:border-t",
         default:
-          "border-[1.5px] bg-gradient-to-b py-1.5 shadow-[inset_0px_1px_1px_0px_rgba(255,255,255,0.7),0px_0px_1px_1px_rgba(0,0,0,0.2)] transition-all duration-300",
+          "border-[1.5px] bg-gradient-to-b py-1.5 shadow-[inset_0px_1px_1px_0px_rgba(255,255,255,0.4)] transition-all duration-300",
         soft: "backdrop-blur-lg",
         outline: "border backdrop-blur-lg",
         ghost: "",

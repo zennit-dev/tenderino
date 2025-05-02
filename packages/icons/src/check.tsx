@@ -1,7 +1,13 @@
 import type { IconProps } from "@zenncore/types/components";
 
 export const CheckIcon = (props: IconProps) => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" {...props}>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 18 18"
+    width={24}
+    height={24}
+    {...props}
+  >
     <g fill="currentColor">
       <path
         opacity=".4"

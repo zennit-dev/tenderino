@@ -1,3 +1,5 @@
+import { AIButton } from "@/components/ai-button";
+
 export default () => {
-  return null;
+  return <AIButton>AI</AIButton>;
 };
