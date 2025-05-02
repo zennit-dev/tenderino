@@ -1,12 +1,9 @@
 import {
-  EditIcon,
   FilterIcon,
   InfoIcon,
   LaptopChart,
   MoreIcon,
   PlusCircleIcon,
-  SettingsIcon,
-  ShopIcon,
   UsersIcon,
 } from "@zennui/icons";
 import { Button } from "@zennui/web/button";
@@ -54,10 +51,12 @@ export default () => {
           <FilterIcon />
           Filter
         </Button>
-        <Button color="primary" className="px-6">
-          <PlusCircleIcon />
-          Create New Tender
-        </Button>
+        <Link href="/tenders/new">
+          <Button color="primary">
+            <PlusCircleIcon />
+            Create New Tender
+          </Button>
+        </Link>
       </div>
       <div className="flex-row flex gap-4 flex-wrap">
         {TENDERS.map((tender) => (
