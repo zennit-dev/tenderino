@@ -1,3 +1,4 @@
+import type { DynamicSegmentProps } from "@zenncore/types/navigation";
 import {
   CalendarIcon,
   FileContentIcon,
@@ -5,7 +6,6 @@ import {
   UsersIcon,
 } from "@zennui/icons";
 import { Button } from "@zennui/web/button";
-import type { DynamicSegmentProps } from "@zenncore/types/navigation";
 const submissionRequirements = [
   "Technical Specification",
   "Price Quote",
@@ -92,7 +92,7 @@ export default async ({ params }: DynamicSegmentProps) => {
           </div>
           <div className="space-y-4">
             <h3 className="font-bold text-xl">Tender Documents</h3>
-            <div className="flex flex-col gap-2 divide-y divide-y-border">
+            <div className="flex flex-col gap-2 divide-y divide-border">
               {tenderDocuments.map((tenderDocument) => (
                 <div
                   key={tenderDocument.name}
@@ -106,38 +106,38 @@ export default async ({ params }: DynamicSegmentProps) => {
                     </p>
                   </div>
                   <Button color="accent" className="ml-auto">
-                    <FileContentIcon />
-                    Download
+                    <FileContentIcon className="fill-foreground-dimmed" />
+                    <p className="text-foreground-dimmed">Download</p>
                   </Button>
                 </div>
               ))}
             </div>
           </div>
         </div>
-        <div className="border border-border mt-8 h-fit pl-2 py-2 space-y-2 rounded-xl">
+        <div className=" mt-8 h-fit pl-4 py-2 space-y-2">
           <h2>Tender Details</h2>
-          <div className="divide-y divide-y-border gap-2 flex flex-col">
+          <div className="divide-y divide-border gap-2 flex flex-col">
             <div className="flex gap-3 items-center pb-2 pr-10">
               <CalendarIcon className="w-7 h-7 fill-red-500" />
               <div className="flex flex-col gap-px">
                 <p className="text-foreground-dimmed text-sm">
                   Submission Deadline
                 </p>
-                <p className="font-bold">{new Date().toISOString()}</p>
+                <p className="font-medium">{new Date().toISOString()}</p>
               </div>
             </div>
             <div className="flex gap-3 items-center pb-2">
               <LaptopChart className="w-7 h-7" />
               <div className="flex flex-col gap-px">
                 <p className="text-foreground-dimmed text-sm">Category</p>
-                <p className="font-bold">Infrastructure</p>
+                <p className="font-medium">Infrastructure</p>
               </div>
             </div>
             <div className="flex gap-3 items-center pb-2">
               <UsersIcon className="w-7 h-7 fill-blue-500" />
               <div className="flex flex-col gap-px">
                 <p className="text-foreground-dimmed text-sm">Submissions</p>
-                <p className="font-bold">3 Vendors</p>
+                <p className="font-medium">3 Vendors</p>
               </div>
             </div>
           </div>

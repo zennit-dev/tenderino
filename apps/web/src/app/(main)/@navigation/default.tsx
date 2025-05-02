@@ -1,12 +1,17 @@
 "use client";
 import { Sidebar, SidebarBody, SidebarLink } from "@/components/sidebar";
-import { ArrowLeftIcon, SettingsIcon } from "@zennui/icons";
+import { ArrowLeftIcon, SettingsIcon, ShopIcon } from "@zennui/icons";
 import { motion } from "motion/react";
 import Link from "next/link";
 import React, { useState } from "react";
 
 export default () => {
   const links = [
+    {
+      label: "Tenders",
+      href: "/tenders",
+      icon: <ShopIcon className="h-5 w-5 shrink-0" />,
+    },
     {
       label: "Settings",
       href: "#",

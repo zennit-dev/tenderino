@@ -9,7 +9,7 @@
   --color-background-rich: hsl(0 0% 100%); /* Lighter */
 
   /* foreground shades - pure neutral grays with more contrast */
-  --color-foreground-dimmed: hsl(0 0% 15%); /* Darker */
+  --color-foreground-dimmed: hsl(0 0% 55%); /* Darker */
   --color-foreground: hsl(224 71.4% 4.1%); /* Base */
   --color-foreground-rich: hsl(0 0% 35%); /* Lighter */
 
