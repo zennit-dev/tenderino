@@ -12,12 +12,12 @@ export default ({
   action,
 }: LayoutProps<"navigation" | "action">) => {
   return (
-    <main className="flex flex-row items-center">
+    <main className="flex flex-row items-center size-full">
       {navigation}
       <section className={"grow h-full flex flex-col"}>
         <nav className={"h-12 w-full"} />
         <section
-          className={"rounded-tl-lg bg-background grow w-full shadow-lg"}
+          className={"rounded-tl-lg bg-background grow w-full shadow-lg p-4"}
         >
           {children}
         </section>
