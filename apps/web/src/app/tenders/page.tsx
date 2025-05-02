@@ -9,9 +9,11 @@ import {
 } from "@zennui/icons";
 import { Button } from "@zennui/web/button";
 import { Input } from "@zennui/web/input";
+import Link from "next/link";
 
 const TENDERS = [
   {
+    id: "fijweifwejfopwejio",
     Icon: LaptopChart,
     title: "Tender Title",
     description:
@@ -20,6 +22,7 @@ const TENDERS = [
     vendorCount: 5,
   },
   {
+    id: "cuevieruviwjviw9u",
     Icon: LaptopChart,
     title: "Tender Title",
     description:
@@ -28,6 +31,7 @@ const TENDERS = [
     vendorCount: 5,
   },
   {
+    id: "fweifjewifejw1",
     Icon: LaptopChart,
     title: "Tender Title",
     description:
@@ -80,9 +84,11 @@ export default () => {
               </p>
             </div>
             <div className="border-t flex justify-between items-center border-border pt-4 px-4">
-              <Button>
-                <InfoIcon className="size-5" /> View Details
-              </Button>
+              <Link href={`/tenders/${tender.id}`}>
+                <Button>
+                  <InfoIcon className="size-5" /> View Details
+                </Button>
+              </Link>
               <Button color="primary">
                 <InfoIcon className="size-5" />
                 Publish

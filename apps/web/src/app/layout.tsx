@@ -27,7 +27,7 @@ export default ({ children, navigation }: LayoutProps<"navigation">) => {
         <main className={"grow h-full flex flex-col"}>
           <nav className={"h-12 w-full"} />
           <section
-            className={"rounded-tl-lg bg-background grow w-full shadow-lg"}
+            className={"rounded-tl-lg bg-background grow w-full py-6 shadow-lg"}
           >
             {children}
           </section>
