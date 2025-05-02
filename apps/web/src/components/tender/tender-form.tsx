@@ -1,6 +1,6 @@
 "use client";
 
-import { CheckIcon, LogInIcon, XIcon } from "@zennui/icons";
+import { CheckIcon, LogInIcon, PlusCircleIcon, XIcon } from "@zennui/icons";
 import { Button } from "@zennui/web/button";
 import {
   field,
@@ -33,18 +33,19 @@ export const TenderForm = () => {
     console.log(data);
   };
 
-  const [requirments, setRequirments] = useState<string[]>([]);
+  const [requirments, setRequirments] = useState<string[]>([uuid()]);
   return (
     <section className="size-full">
-      <div className="p-4 border-b border-border">
+      <div>
         <div className="flex items-center justify-between">
-          <h1>New Tender</h1>
+          <h1 className="text-2xl font-bold">New Tender</h1>
           <XIcon onClick={router.back} />
         </div>
         <p className="text-sm text-muted-foreground">
           Create a new tender to start a new procurement process.
         </p>
       </div>
+      <hr className="my-4 bg-border border-border text-border" />
       <Tabs value={active} onValueChange={setActive}>
         <TabsContent value="general">
           <InferredForm config={general} onSubmit={handleGeneralSubmit}>
@@ -54,7 +55,7 @@ export const TenderForm = () => {
             </FormSubmitButton>
           </InferredForm>
         </TabsContent>
-        <TabsContent value="requirments">
+        <TabsContent value="requirments" className="flex flex-col gap-4">
           {requirments.map((id) => (
             <div key={id}>
               <InferredForm
@@ -63,13 +64,18 @@ export const TenderForm = () => {
               />
             </div>
           ))}
-          <Button onClick={() => setRequirments([...requirments, uuid()])}>
+          <Button
+            onClick={() => setRequirments([...requirments, uuid()])}
+            variant={"soft"}
+            className="w-full"
+          >
+            <PlusCircleIcon />
             Add Requirment
           </Button>
-          <FormSubmitButton>
+          <Button className="ml-auto">
             <LogInIcon />
             Continue to Documents
-          </FormSubmitButton>
+          </Button>
         </TabsContent>
         <TabsContent value="documents">
           <InferredForm config={document} onSubmit={handleDocumentSubmit}>
