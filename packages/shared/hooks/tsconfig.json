@@ -1,0 +1,7 @@
+{
+  "extends": ["@zenncore/config/typescript/web"],
+  "compilerOptions": {
+    "jsx": "react-jsx"
+  },
+  "include": ["src"]
+}
