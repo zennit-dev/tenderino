@@ -1,0 +1,116 @@
+@import "tailwindcss";
+
+@plugin "tailwindcss-animate";
+
+@theme {
+  /* background shades - more distinct neutral */
+  --color-background-dimmed: hsl(0 0% 45%); /* Darker */
+  --color-background: hsl(216 71% 99%); /* Light but not white */
+  --color-background-rich: hsl(0 0% 100%); /* Lighter */
+
+  /* foreground shades - pure neutral grays with more contrast */
+  --color-foreground-dimmed: hsl(0 0% 15%); /* Darker */
+  --color-foreground: hsl(224 71.4% 4.1%); /* Base */
+  --color-foreground-rich: hsl(0 0% 35%); /* Lighter */
+
+  /* emphasis shades - darker than foreground */
+  --color-emphasis-dimmed: hsl(0 0% 5%); /* Darkest */
+  --color-emphasis: hsl(0 0% 10%); /* Darker than foreground */
+  --color-emphasis-rich: hsl(0 0% 15%); /* Slightly lighter */
+
+  /* accent shades - lighter than background */
+  --color-accent-dimmed: hsl(0 0% 85%); /* Darker than background */
+  --color-accent: hsl(0 0% 95%); /* Lighter than background */
+  --color-accent-rich: hsl(0 0% 100%); /* Lightest */
+  --color-accent-foreground: hsl(0 0% 45%); /* Darker for contrast */
+
+  /* primary shades - deep navy blue */
+  --color-primary-dimmed: hsl(235 40% 25%); /* Darker */
+  --color-primary: hsl(235 40% 37%); /* Base - #272B5F */
+  --color-primary-rich: hsl(235 40% 65%); /* Lighter */
+
+  /* secondary shades - vibrant red */
+  --color-secondary-dimmed: hsl(342 70% 35%); /* Darker */
+  --color-secondary: hsl(342 70% 50%); /* Base - #D82657 */
+  --color-secondary-rich: hsl(342 70% 75%); /* Lighter */
+
+  /* destructive shades */
+  --color-error-dimmed: hsl(0 74% 42%); /* Darker */
+  --color-error: hsl(0 72% 51%); /* Base */
+  --color-error-rich: hsl(0 91% 71%); /* Lighter */
+  --color-error-foreground: hsl(0 63% 31%); /* Darkest */
+
+  /* success shades */
+  --color-success-dimmed: hsl(142 72% 29%); /* Darker */
+  --color-success: hsl(142 76% 36%); /* Base */
+  --color-success-rich: hsl(142 69% 58%); /* Lighter */
+  --color-success-foreground: hsl(144 61% 20%); /* Darkest */
+
+  /* info shades */
+  --color-info-dimmed: hsl(201 96% 32%); /* Darker */
+  --color-info: hsl(200 98% 39%); /* Base */
+  --color-info-rich: hsl(198 93% 60%); /* Lighter */
+  --color-info-foreground: hsl(202 80% 24%); /* Darkest */
+
+  /* warning shades */
+  --color-warning-dimmed: hsl(35 92% 33%); /* Darker */
+  --color-warning: hsl(41 96% 40%); /* Base */
+  --color-warning-rich: hsl(48 96% 53%); /* Lighter */
+  --color-warning-foreground: hsl(28 73% 26%); /* Darkest */
+
+  /* neutral shades - more contrast */
+  --color-neutral-dimmed: hsl(0 15% 30%); /* Darker */
+  --color-neutral: hsl(0 12% 40%); /* Base */
+  --color-neutral-rich: hsl(0 10% 60%); /* Lighter */
+  --color-neutral-foreground: hsl(0 20% 15%); /* Darkest */
+
+  /* extras */
+  --color-border: hsl(220 13% 91%); /* Darker for better visibility */
+  --color-ring: hsl(186 81% 25%); /* Matched to primary */
+
+  /* chart colors - red/gold theme */
+  --color-chart-1: hsl(0 85% 60%); /* Primary red */
+  --color-chart-2: hsl(45 85% 35%); /* Secondary gold */
+  --color-chart-3: hsl(15 75% 50%); /* Terracotta */
+  --color-chart-4: hsl(30 85% 45%); /* Bronze */
+  --color-chart-5: hsl(60 70% 55%); /* Light gold */
+
+  --radius: 0.5rem;
+  --text-2xs: 0.6rem;
+  --rounded-3xl: 1.5rem;
+
+  --animate-accordion-up: animate-accordion-up 0.2s ease-out;
+  --animate-accordion-down: animate-accordion-down 0.2s ease-out;
+
+  --font-sans: Noto Sans, sans-serif;
+}
+
+@keyframes animate-accordion-down {
+  from {
+    height: 0;
+  }
+
+  to {
+    height: var(--radix-accordion-content-height);
+  }
+}
+
+@keyframes animate-accordion-up {
+  from {
+    height: var(--radix-accordion-content-height);
+  }
+  to {
+    height: 0;
+  }
+}
+
+@layer components {
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
+}

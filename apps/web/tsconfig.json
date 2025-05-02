@@ -1,0 +1,17 @@
+{
+  "extends": ["@zenncore/config/typescript/web"],
+  "include": ["./*.ts", "src", ".next/types/**/*.ts"],
+  "compilerOptions": {
+    "baseUrl": "./src",
+    "paths": {
+      "@/*": ["./*"]
+    },
+    "preserveSymlinks": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
+  },
+  "exclude": ["node_modules"]
+}

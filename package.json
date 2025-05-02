@@ -1,0 +1,58 @@
+{
+  "name": "zerapy",
+  "private": true,
+  "scripts": {
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "lint": "turbo lint",
+    "clear": "git clean -fdX"
+  },
+  "dependencies": {
+    "@babel/core": "^7.25.2",
+    "@babel/generator": "^7.25.0",
+    "@babel/parser": "^7.25.3",
+    "@babel/traverse": "^7.25.3",
+    "@babel/types": "^7.25.2",
+    "@hookform/resolvers": "^3.9.0",
+    "@node-saml/node-saml": "^5.0.1",
+    "@tailwindcss/postcss": "^4.0.0",
+    "@tanstack/react-query": "^5.51.23",
+    "@tanstack/react-query-next-experimental": "^5.66.0",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.1",
+    "date-fns": "^4.1.0",
+    "jotai": "^2.9.1",
+    "lodash.isequal": "^4.5.0",
+    "nuqs": "^2.4.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-hook-form": "^7.52.2",
+    "tailwind-merge": "^2.4.0",
+    "uuid": "^10.0.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.8.3",
+    "@types/lodash.isequal": "^4.5.8",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "@types/uuid": "^10.0.0",
+    "autoprefixer": "^10.4.18",
+    "postcss": "^8.4.35",
+    "tailwindcss": "^4.0.0",
+    "tailwindcss-animate": "^1.0.7",
+    "turbo": "^2.5.0",
+    "typescript": "^5.4.5"
+  },
+  "packageManager": "npm@10.2.0",
+  "workspaces": [
+    "apps/*",
+    "packages/shared/*",
+    "packages/ui/*",
+    "packages/*"
+  ],
+  "resolutions": {
+    "next": "^15.3.0-canary.10"
+  }
+}
