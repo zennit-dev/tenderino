@@ -1,8 +1,10 @@
 import {
   EditIcon,
+  FilterIcon,
   InfoIcon,
   LaptopChart,
   MoreIcon,
+  PlusCircleIcon,
   SettingsIcon,
   ShopIcon,
   UsersIcon,
@@ -46,10 +48,14 @@ export default () => {
     <div className="flex flex-col gap-4">
       <h1 className="text-3xl font-bold">All Tenders</h1>
       <p>Browse and apply for available procurement opportunities</p>
-      <div className="flex gap-4">
+      <div className="flex gap-2">
         <Input placeholder="SearchTender" />
-        <Button>Filter</Button>
+        <Button>
+          <FilterIcon />
+          Filter
+        </Button>
         <Button color="primary" className="px-6">
+          <PlusCircleIcon />
           Create New Tender
         </Button>
       </div>
