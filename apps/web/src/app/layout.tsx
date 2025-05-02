@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   description: "aadf",
 };
 
-export default ({ children }: LayoutProps) => {
+export default ({ children, navigation }: LayoutProps<"navigation">) => {
   return (
     <html
       lang="en"
@@ -19,10 +19,19 @@ export default ({ children }: LayoutProps) => {
       <body
         suppressHydrationWarning
         className={cn(
-          "h-screen min-h-screen w-screen bg-background font-sans text-foreground mx-auto max-w-screen-2xl",
+          "h-screen min-h-screen w-screen bg-accent font-sans text-foreground",
+          "flex flex-row items-center",
         )}
       >
-        {children}
+        {navigation}
+        <main className={"grow h-full flex flex-col"}>
+          <nav className={"h-12 w-full"} />
+          <section
+            className={"rounded-tl-lg bg-background grow w-full shadow-lg"}
+          >
+            {children}
+          </section>
+        </main>
       </body>
     </html>
   );

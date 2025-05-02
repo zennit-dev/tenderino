@@ -20,7 +20,7 @@
 
   /* accent shades - distinct cool grays */
   --color-accent-dimmed: hsl(0 0% 93%); /* Notably darker */
-  --color-accent: hsl(0 0% 100%); /* Clean white */
+  --color-accent: hsl(0, 0%, 86%); /* Clean white */
   --color-accent-rich: hsl(0 0% 100%); /* Mid-tone */
   --color-accent-foreground: hsl(0 0% 45%); /* Darker for contrast */
 
