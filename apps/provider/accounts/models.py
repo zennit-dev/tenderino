@@ -22,8 +22,9 @@ def user_dir_path(instance, filename: str) -> str:
 
 
 class UserPermissions(models.TextChoices):
-    SUPERUSER = "Superuser", _("Superuser")
-    RECEPTIONIST = "Receptionist", _("Receptionist")
+    USER = "User", _("User")
+    STAFF = "Staff", _("Staff")
+    ADMIN = "Admin", _("Admin")
 
 
 class UserStatus(models.TextChoices):
@@ -37,7 +38,7 @@ class UserManager(BaseUserManager):
         self,
         email: str,
         password: str,
-        access: str = UserPermissions.SUPERUSER,
+        access: str = UserPermissions.ADMIN,
     ) -> "User":
         return self.create_user(
             email,
@@ -53,7 +54,7 @@ class UserManager(BaseUserManager):
         password: str,
         is_superuser: bool = False,
         is_staff: bool = False,
-        access: str = UserPermissions.RECEPTIONIST,
+        access: str = UserPermissions.USER,
         status: str = UserStatus.ACTIVE,
         is_active: bool = True,
     ) -> "User":
@@ -72,31 +73,35 @@ class UserManager(BaseUserManager):
         return user
 
 
-class User(AbstractBaseUser, PermissionsMixin):
-    username = models.CharField(max_length=50, null=True, blank=True)
-    firstName = models.CharField(max_length=50, null=True, blank=True)
-    lastName = models.CharField(max_length=50, null=True, blank=True)
-    phone = models.CharField(max_length=15, null=True, blank=True)
+class UserApplication(models.Model):
+    name = models.CharField(max_length=50)
+    surname = models.CharField(max_length=50)
+    business_name = models.CharField(max_length=100)
+    nipt = models.CharField(max_length=20, unique=True)  # Document number
+    phone_number = models.CharField(max_length=15)
     email = models.EmailField(unique=True, max_length=255)
-    avatar = models.ImageField(
-        upload_to=user_dir_path,
-        null=True,
-        blank=True,
-        validators=[validators.validate_img_extension],
+    password = models.CharField(
+        max_length=255
+    )  # Will be used to create user after approval
+    created_at = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(
+        max_length=9, choices=UserStatus.choices, default=UserStatus.PENDING
     )
-    jobTitle = models.CharField(max_length=50, null=True, blank=True)
-    address = models.CharField(max_length=255, null=True, blank=True)
-    city = models.CharField(max_length=50, null=True, blank=True)
-    country = models.CharField(max_length=50, null=True, blank=True)
-    zipCode = models.CharField(max_length=10, null=True, blank=True)
-    bio = models.TextField(null=True, blank=True)
+
+    def __str__(self) -> str:
+        return f"{self.business_name} - {self.nipt}"
+
+
+class User(AbstractBaseUser, PermissionsMixin):
+    name = models.CharField(max_length=50, null=True, blank=True)
+    email = models.EmailField(unique=True, max_length=255)
     access = models.CharField(
         max_length=12,
         choices=UserPermissions.choices,
-        default=UserPermissions.RECEPTIONIST,
+        default=UserPermissions.USER,
     )
     status = models.CharField(
-        max_length=9, choices=UserStatus.choices, default=UserStatus.PENDING
+        max_length=9, choices=UserStatus.choices, default=UserStatus.ACTIVE
     )
     is_superuser = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
@@ -110,4 +115,4 @@ class User(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = ["password"]
 
     def __str__(self) -> str:
-        return f"{self.id} - {self.username} - {self.email}"
+        return f"{self.id} - {self.name} - {self.email}"
