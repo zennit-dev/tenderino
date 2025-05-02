@@ -1,15 +1,9 @@
 import "./globals.css";
 
-import type { LayoutProps } from "@zenncore/types/navigation";
 import { cn } from "@zenncore/utils";
-import type { Metadata } from "next";
+import type { LayoutProps } from "@zenncore/types/navigation";
 
-export const metadata: Metadata = {
-  title: "aadf",
-  description: "aadf",
-};
-
-export default ({ children, navigation }: LayoutProps<"navigation">) => {
+export default ({ children }: LayoutProps) => {
   return (
     <html
       lang="en"
@@ -19,19 +13,10 @@ export default ({ children, navigation }: LayoutProps<"navigation">) => {
       <body
         suppressHydrationWarning
         className={cn(
-          "h-screen min-h-screen w-screen bg-accent font-sans text-foreground",
-          "flex flex-row items-center",
+          "h-screen min-h-screen w-screen bg-accent font-sans text-foreground"
         )}
       >
-        {navigation}
-        <main className={"grow h-full flex flex-col"}>
-          <nav className={"h-12 w-full"} />
-          <section
-            className={"rounded-tl-lg bg-background grow w-full shadow-lg"}
-          >
-            {children}
-          </section>
-        </main>
+        {children}
       </body>
     </html>
   );
