@@ -1,16 +1,16 @@
 "use client";
+import { LogInIcon } from "@zennui/icons";
 import {
-  field,
   FormSubmitButton,
   InferredForm,
   type InferredFormFields,
+  field,
 } from "@zennui/web/form";
-import { useRouter } from "next/navigation";
-import Image from "next/image";
-import { z } from "zod";
 import { Tabs, TabsContent } from "@zennui/web/tabs";
-import { LogInIcon } from "@zennui/icons";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { z } from "zod";
 
 export default () => {
   const router = useRouter();
@@ -25,7 +25,7 @@ export default () => {
   };
 
   const handleCredentialsSubmit = (
-    data: InferredFormFields<typeof credentials>
+    data: InferredFormFields<typeof credentials>,
   ) => {
     console.log(data);
     router.push("/");
@@ -138,6 +138,7 @@ const company = {
     label: "Supporting Document",
     constraint: z.array(z.instanceof(File)),
     shape: "file",
+    accept: { "text/pdf": [] },
     description: "Enter your company documents such as NUIS and QKB history.",
   }),
 };
