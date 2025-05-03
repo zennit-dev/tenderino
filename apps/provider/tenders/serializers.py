@@ -10,7 +10,6 @@ class DocumentTenderCriteriaSerializer(serializers.ModelSerializer):
         model = DocumentTenderCriteria
         fields = [
             "id",
-            "document",
             "document_url",
             "uploaded_at",
         ]
@@ -30,13 +29,15 @@ class TenderCriteriaSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "category",
-            "content",
+            "type",
+            "description",
+            "weight",
         ]
 
 
 class TenderSerializer(serializers.ModelSerializer):
     criteria = TenderCriteriaSerializer(many=True)
-    document_criteria = serializers.SerializerMethodField()
+    tender_document = serializers.SerializerMethodField()
 
     class Meta:
         model = Tender
@@ -51,10 +52,10 @@ class TenderSerializer(serializers.ModelSerializer):
             "status",
             "category",
             "criteria",
-            "document_criteria",
+            "tender_document",
         )
 
-    def get_document_criteria(self, obj):
+    def get_tender_document(self, obj):
         documents = DocumentTenderCriteria.objects.filter(
             tender_criteria__tender_id=obj.id
         )

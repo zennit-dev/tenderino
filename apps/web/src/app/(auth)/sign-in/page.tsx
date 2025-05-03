@@ -20,7 +20,7 @@ export default () => {
 
     const response = await signIn(data);
 
-    if (!response.success) return;
+    if (!response.success || !response.data.redirect) return;
 
     router.push(response.data.redirect);
   };
