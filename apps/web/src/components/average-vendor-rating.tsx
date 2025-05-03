@@ -6,7 +6,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@zennui/web/chart/chart";
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
+import { Bar, BarChart, XAxis, YAxis } from "recharts";
 
 const chartData = [
   { month: "Monday", data: 186 },
@@ -32,6 +32,16 @@ export const AverageVendorRating = () => {
       className="h-full w-full max-h-[500px]"
     >
       <BarChart accessibilityLayer data={chartData}>
+        <defs>
+          <linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="var(--color-data)" stopOpacity={0.8} />
+            <stop
+              offset="100%"
+              stopColor="var(--color-data)"
+              stopOpacity={0.4}
+            />
+          </linearGradient>
+        </defs>
         <XAxis
           dataKey="month"
           tickLine={false}
@@ -45,7 +55,7 @@ export const AverageVendorRating = () => {
           content={<ChartTooltipContent indicator="dashed" />}
         />
 
-        <Bar dataKey="data" fill="var(--color-data)" radius={4} />
+        <Bar dataKey="data" fill="url(#barGradient)" radius={4} />
       </BarChart>
     </ChartContainer>
   );

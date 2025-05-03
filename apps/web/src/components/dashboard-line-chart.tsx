@@ -42,16 +42,17 @@ export const DashboardLineChart = ({
         <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
         <defs>
           <linearGradient id={`fillData-${color}`} x1="0" y1="0" x2="0" y2="1">
-            <stop offset="5%" stopColor={color} stopOpacity={0.8} />
-            <stop offset="95%" stopColor={color} stopOpacity={0.1} />
+            <stop offset="0%" stopColor={color} stopOpacity={1} />
+            <stop offset="100%" stopColor={color} stopOpacity={0.1} />
           </linearGradient>
         </defs>
         <Area
           dataKey="data"
           type="natural"
           fill={`url(#fillData-${color})`}
-          fillOpacity={0.4}
+          fillOpacity={0.6}
           stroke={color}
+          strokeWidth={2}
           stackId="a"
         />
       </AreaChart>

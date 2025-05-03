@@ -34,28 +34,25 @@ export const TenderForm = () => {
   const [isSubmissionPending, startSubmissionTransition] = useTransition();
 
   const handleGeneralSubmit = (data: InferredFormFields<typeof general>) => {
-    setActive("requirments");
+    setActive("documents");
     setForm({
       ...form,
       general: data,
     });
   };
 
-  const handleRequirmentSubmit = () => {
-    setActive("documents");
-  };
-
-  const handleDocumentSubmit = async (
-    data: InferredFormFields<typeof document>
-  ) => {
+  const handleDocumentSubmit = (data: InferredFormFields<typeof document>) => {
+    setActive("requirments");
     setForm({
       ...form,
       documents: data,
     });
+  };
 
+  const handleRequirmentSubmit = async () => {
     if (!form.general) return;
+    if (!form.documents) return;
     if (!form.requirments) return;
-    if (!data.document) return;
 
     const request = new FormData();
 
@@ -80,7 +77,7 @@ export const TenderForm = () => {
     await create<FormData>(request);
   };
 
-  const handleAIGeneration = async () => {
+  const handleAADFGeneration = async () => {
     if (!form.general) return;
     const criteria = await generateCriteria({
       title: form.general.title,
@@ -147,26 +144,24 @@ export const TenderForm = () => {
           </Button>
           <AIButton
             className="w-full"
-            onClick={() => startAITransition(handleAIGeneration)}
+            onClick={() => startAITransition(handleAADFGeneration)}
             disabled={isAIPending}
           >
             {isAIPending ? "Generating..." : "Generate with AI"}
           </AIButton>
-          <Button className="ml-auto" onClick={handleRequirmentSubmit}>
-            <LogInIcon />
-            Continue to Documents
+          <Button
+            className="ml-auto"
+            onClick={() => startSubmissionTransition(handleRequirmentSubmit)}
+          >
+            <CheckIcon />
+            {isSubmissionPending ? "Submitting..." : "Submit"}
           </Button>
         </TabsContent>
         <TabsContent value="documents">
-          <InferredForm
-            config={document}
-            onSubmit={(data) =>
-              startSubmissionTransition(() => handleDocumentSubmit(data))
-            }
-          >
+          <InferredForm config={document} onSubmit={handleDocumentSubmit}>
             <FormSubmitButton>
-              <CheckIcon />
-              {isSubmissionPending ? "Submitting..." : "Submit"}
+              Continue to Requirments
+              <LogInIcon />
             </FormSubmitButton>
           </InferredForm>
         </TabsContent>

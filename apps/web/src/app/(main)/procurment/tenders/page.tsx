@@ -1,12 +1,5 @@
 import { TenderCard } from "@/components/tender-card";
-import {
-  FilterIcon,
-  InfoIcon,
-  LaptopChart,
-  MoreIcon,
-  PlusCircleIcon,
-  UsersIcon,
-} from "@zennui/icons";
+import { FilterIcon, LaptopChart, PlusCircleIcon } from "@zennui/icons";
 import { Button } from "@zennui/web/button";
 import { Input } from "@zennui/web/input";
 import Link from "next/link";
