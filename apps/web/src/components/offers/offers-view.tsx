@@ -55,7 +55,10 @@ export const OffersView = () => {
                   <span>{offer.score} / 100</span>
                 </h3>
               ) : (
-                <Link href={`/offers/${offer.id}/evaluate`} className="ml-auto">
+                <Link
+                  href={`/evaluation/offers/${offer.id}/evaluate`}
+                  className="ml-auto"
+                >
                   <LogInIcon />
                 </Link>
               )}

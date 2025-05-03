@@ -98,7 +98,7 @@ export default async ({ params }: DynamicSegmentProps) => {
                 Reference Number: TQR-001-007
               </h3>
             </div>
-            <Link href={`/tenders/${id}/offers`} className="ml-auto">
+            <Link href={`/vendor/tenders/${id}/apply`} className="ml-auto">
               <Button color="primary">
                 <FileContentIcon className="size-5 fill-white" />
                 Apply for tender

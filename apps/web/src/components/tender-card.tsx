@@ -33,7 +33,7 @@ export const TenderCard = ({
     <div
       className={cn(
         "flex flex-col gap-2 border border-border py-4 rounded-lg",
-        className,
+        className
       )}
     >
       <div className="px-4 space-y-2">
@@ -61,7 +61,7 @@ export const TenderCard = ({
         </p>
       </div>
       <div className="border-t flex justify-between items-center border-border pt-4 px-4">
-        <Link href={`/tenders/${id}`}>
+        <Link href={`/vendor/tenders/${id}`}>
           <Button color="accent">
             <InfoIcon className="size-5" /> View Details
           </Button>

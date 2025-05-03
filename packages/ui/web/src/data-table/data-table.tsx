@@ -55,7 +55,7 @@ export const DataTable = ({ className, classList }: DataTableProps) => {
         {table.getRowModel().rows?.length ? (
           table.getRowModel().rows.map((row) => (
             <TableRow
-              key={row.original._id.toString()}
+              key={row.original.id.toString()}
               data-state={row.getIsSelected() && "selected"}
               className={cn("relative z-10", classList?.["body-row"])}
               onClick={() => {

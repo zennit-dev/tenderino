@@ -33,6 +33,20 @@ const completedTendersChartConfig = {
   },
 };
 
+const averageSubmissionsChartConfig = {
+  data: {
+    label: "Average Submissions",
+    color: "green",
+  },
+};
+
+const registeredVendorsChartConfig = {
+  data: {
+    label: "Registered Vendors",
+    color: "purple",
+  },
+};
+
 const TENDERS = [
   {
     id: "fijweifwejfopwejio",
@@ -104,7 +118,7 @@ export default () => {
             </div>
             <p className="text-4xl pb-4 font-bold px-5">7</p>
             <DashboardLineChart
-              chartConfig={activeTendersChartConfig}
+              chartConfig={averageSubmissionsChartConfig}
               chartData={chartData}
             />
           </div>
@@ -117,7 +131,7 @@ export default () => {
             </div>
             <p className="text-4xl pb-4 font-bold px-5">8</p>
             <DashboardLineChart
-              chartConfig={activeTendersChartConfig}
+              chartConfig={registeredVendorsChartConfig}
               chartData={chartData}
             />
           </div>
@@ -132,7 +146,7 @@ export default () => {
       </section>
       <section className="gap-6 flex flex-col">
         <h2 className="font-medium text-2xl">Recent Tenders (2)</h2>
-        <div className="flex">
+        <div className="flex gap-4">
           <div className="w-3/5 flex flex-wrap gap-4">
             {TENDERS.map((tender) => (
               <TenderCard
@@ -197,7 +211,7 @@ export default () => {
                   </p>
                   <div className="flex-1">
                     <p>IT Infrastructure Upgrade</p>
-                    <p>Decision Deadline</p>
+                    <p>Decision Deadline</p>
                   </div>
                   <p className="text-foreground-dimmed">15:00</p>
                 </div>
