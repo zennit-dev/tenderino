@@ -21,6 +21,15 @@ class ApplicationViewSet(viewsets.ModelViewSet):
     serializer_class = ApplicationSerializer
     parser_classes = [parsers.MultiPartParser, parsers.FormParser]
 
+    def get_queryset(self):
+        queryset = Application.objects.all()
+        tender_id = self.request.query_params.get("tender")
+        if tender_id:
+            queryset = queryset.filter(tender_id=tender_id)
+        return queryset.select_related("applicant", "tender").prefetch_related(
+            "application_criteria", "documents"
+        )
+
     def create(self, request, *args, **kwargs):
         application_data_json = request.data.get("applicationData")
         if not application_data_json:
@@ -49,7 +58,7 @@ class ApplicationViewSet(viewsets.ModelViewSet):
         criteria_objs = []
         for crit in criteria_data:
             crit_obj = CriteriaCompleted.objects.create(
-                tender=application, content=crit["content"]
+                application=application, content=crit["content"]
             )
             criteria_objs.append(crit_obj)
 
