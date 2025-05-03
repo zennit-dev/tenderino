@@ -27,12 +27,6 @@ class UserPermissions(models.TextChoices):
     ADMIN = "Admin", _("Admin")
 
 
-class UserStatus(models.TextChoices):
-    ACTIVE = "Active", _("Active")
-    PENDING = "Pending", _("Pending")
-    SUSPENDED = "Suspended", _("Suspended")
-
-
 class UserManager(BaseUserManager):
     def create_superuser(
         self,
@@ -55,7 +49,6 @@ class UserManager(BaseUserManager):
         is_superuser: bool = False,
         is_staff: bool = False,
         access: str = UserPermissions.USER,
-        status: str = UserStatus.ACTIVE,
         is_active: bool = True,
     ) -> "User":
         user: "User" = self.model(
@@ -63,7 +56,6 @@ class UserManager(BaseUserManager):
             is_superuser=is_superuser,
             is_staff=is_staff,
             access=access,
-            status=status,
             is_active=is_active,
         )
 
@@ -80,9 +72,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         max_length=12,
         choices=UserPermissions.choices,
         default=UserPermissions.USER,
-    )
-    status = models.CharField(
-        max_length=9, choices=UserStatus.choices, default=UserStatus.ACTIVE
     )
     is_superuser = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
