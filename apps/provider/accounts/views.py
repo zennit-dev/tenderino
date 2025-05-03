@@ -14,7 +14,7 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.serializers import Serializer
 
-from accounts.models import User, UserPermissions, UserStatus
+from accounts.models import User, UserPermissions
 from accounts.serializers import UserSerializer
 from provider.custom_functions import generate_temp_login_id, send_email_function
 from provider.minxin import CanManageUsers, PermissionPolicyMixin
@@ -79,12 +79,36 @@ class SignIn(ObtainAuthToken):
     def post(
         self, request: Request, *args: Tuple[Any], **kwargs: Dict[str, Any]
     ) -> Response:
-        response = super().post(request, *args, **kwargs)
-        token = Token.objects.get(key=response.data["token"])
-        user = User.objects.get(id=token.user_id)
+        email = request.data.get("email")
+        password = request.data.get("password")
 
+        if not email or not password:
+            return Response(
+                {"error": "Please provide both email and password."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        try:
+            user = User.objects.get(email=email)
+            if not user.check_password(password):
+                return Response(
+                    {"error": "Invalid credentials."},
+                    status=status.HTTP_401_UNAUTHORIZED,
+                )
+        except User.DoesNotExist:
+            return Response(
+                {"error": "Invalid credentials."},
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
+
+        token, _ = Token.objects.get_or_create(user=user)
         return Response(
-            {"token": token.key, "access": user.access},
+            {
+                "token": token.key,
+                "access": user.access,
+                "email": user.email,
+                "name": user.name,
+            },
             status=status.HTTP_200_OK,
         )
 
@@ -109,8 +133,20 @@ class SignUp(CreateAPIView):
         data = request.data.copy()
         password = request.data.get("password")
 
-        data["access"] = UserPermissions.RECEPTIONIST
-        data["status"] = UserStatus.PENDING
+        if (
+            request.user.is_authenticated
+            and request.user.access == UserPermissions.ADMIN
+        ):
+            access = request.data.get("access", UserPermissions.USER)
+            if access not in [UserPermissions.USER, UserPermissions.STAFF]:
+                return Response(
+                    {"error": "Admin can only create users with USER or STAFF access."},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+            data["access"] = access
+        else:
+            data["access"] = UserPermissions.USER
+
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
 
@@ -120,10 +156,9 @@ class SignUp(CreateAPIView):
 
         user_data = UserSerializer(user).data
         token, created = Token.objects.get_or_create(user_id=user_data.get("id"))
+        user_data["token"] = token.key
 
-        return Response(
-            {"user": user_data, "token": token.key}, status=status.HTTP_201_CREATED
-        )
+        return Response(user_data, status=status.HTTP_201_CREATED)
 
 
 class ResetPassword(UpdateAPIView):
