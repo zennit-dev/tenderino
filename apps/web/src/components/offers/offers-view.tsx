@@ -10,7 +10,7 @@ import type { Offer } from "@/types/offer";
 
 export const OffersView = () => {
   const router = useRouter();
-  const [active, setActive] = useState("general");
+  const [active, setActive] = useState("offers");
 
   const winner = offers.sort((a, b) => b.score - a.score)[0];
 
@@ -18,11 +18,11 @@ export const OffersView = () => {
     <section className="size-full">
       <div>
         <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-bold">New Tender</h1>
+          <h1 className="text-2xl font-bold">Evaluate Tender Offers</h1>
           <XIcon onClick={router.back} />
         </div>
         <p className="text-sm text-muted-foreground">
-          Create a new tender to start a new procurement process.
+          Evaluate the offers for the tender.
         </p>
       </div>
       <hr className="my-4 bg-border border-border text-border" />

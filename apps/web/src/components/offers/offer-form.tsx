@@ -19,8 +19,9 @@ import { cn } from "@zenncore/utils";
 import type { Criteria } from "@/types/criteria";
 import { generateEvaluation } from "@/server/offer";
 import { useTransition } from "react";
-import { CheckIcon, StarIcon } from "@zennui/icons";
-import { Offer } from "@/types/offer";
+import { CheckIcon, StarIcon, XIcon } from "@zennui/icons";
+import type { Offer } from "@/types/offer";
+import { useRouter } from "next/navigation";
 
 export const OfferForm = () => {
   const config = Object.fromEntries(
@@ -50,50 +51,70 @@ export const OfferForm = () => {
     }
   };
 
+  const router = useRouter();
+
   return (
-    <div className="flex flex-col gap-4">
-      <Form {...form}>
-        <form className={cn("flex flex-col gap-2.5")}>
-          {Object.entries(config).map(([key, props]) => (
-            <FormField
-              name={key}
-              key={key}
-              shouldUnregister
-              render={({ field }) => (
-                <FormItem className={props.classList?.root}>
-                  <div className={cn("flex flex-col gap-1")}>
-                    <FormLabel className="capitalize text-primary-dimmed text-lg flex items-center gap-2">
-                      <StarIcon className="size-5 text-yellow-500" />
-                      {props.label}
-                    </FormLabel>
-                    <FormDescription>{props.description}</FormDescription>
-                    <FormControl>
-                      <InferredFormField
-                        {...field}
-                        {...props}
-                        className={props.className}
-                      />
-                    </FormControl>
-                  </div>
-                </FormItem>
-              )}
-            />
-          ))}
-          <div className={"flex w-full justify-end flex items-center gap-2"}>
-            <AIButton
-              onClick={() => startTransition(handleAIEvaluation)}
-              disabled={isPending}
-            >
-              {isPending ? "Evaluating..." : "Evaluate with AI"}
-            </AIButton>
-            <FormSubmitButton>
-              <CheckIcon />
-              Submit
-            </FormSubmitButton>
-          </div>
-        </form>
-      </Form>
-    </div>
+    <main>
+      <div>
+        <div className="flex items-center justify-between">
+          <h1 className="text-2xl font-bold">Evaluate Tender Offers</h1>
+          <XIcon onClick={router.back} />
+        </div>
+        <p className="text-sm text-muted-foreground">
+          Evaluate the offers for the tender.
+        </p>
+      </div>
+      <hr className="my-4 bg-border border-border text-border" />
+      <div className="flex flex-col gap-4">
+        <Form {...form}>
+          <form className={cn("flex flex-col gap-2.5")}>
+            {Object.entries(config).map(([key, props]) => (
+              <FormField
+                name={key}
+                key={key}
+                shouldUnregister
+                render={({ field }) => (
+                  <FormItem className={props.classList?.root}>
+                    <div className={cn("flex flex-col gap-1")}>
+                      <FormLabel className="capitalize text-primary-dimmed text-lg flex items-center gap-2">
+                        <StarIcon className="size-5 text-yellow-500" />
+                        {props.label}
+                        <span className="text-muted-foreground text-sm ml-auto">
+                          Weight{" "}
+                          {criteria.find((c) => c.id === Number(key))?.weight ??
+                            0}{" "}
+                          / 1
+                        </span>
+                      </FormLabel>
+                      <FormDescription>{props.description}</FormDescription>
+                      <FormControl>
+                        <InferredFormField
+                          {...field}
+                          {...props}
+                          className={props.className}
+                        />
+                      </FormControl>
+                    </div>
+                  </FormItem>
+                )}
+              />
+            ))}
+            <div className={"flex w-full justify-end flex items-center gap-2"}>
+              <AIButton
+                onClick={() => startTransition(handleAIEvaluation)}
+                disabled={isPending}
+              >
+                {isPending ? "Evaluating..." : "Evaluate with AI"}
+              </AIButton>
+              <FormSubmitButton>
+                <CheckIcon />
+                Submit
+              </FormSubmitButton>
+            </div>
+          </form>
+        </Form>
+      </div>
+    </main>
   );
 };
 
@@ -112,6 +133,18 @@ const criteria: Criteria[] = [
     description: "Description of the criteria",
     weight: 1,
   },
+  {
+    id: 3,
+    name: "Criteria 3",
+    type: "description",
+    description: "Description of the criteria",
+  },
+  {
+    id: 4,
+    name: "Criteria 4",
+    type: "description",
+    description: "Description of the criteria",
+  },
 ];
 
 const offer: Offer = {
@@ -122,4 +155,5 @@ const offer: Offer = {
   isEvaluated: false,
   attachments: [],
   inquiry: "Inquiry 1",
+  logo: "https://via.placeholder.com/150",
 };
