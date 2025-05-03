@@ -109,7 +109,7 @@ class SignUp(CreateAPIView):
         data = request.data.copy()
         password = request.data.get("password")
 
-        data["access"] = UserPermissions.RECEPTIONIST
+        data["access"] = UserPermissions.STAFF
         data["status"] = UserStatus.PENDING
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
