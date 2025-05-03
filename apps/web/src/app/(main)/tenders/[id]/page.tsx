@@ -1,11 +1,16 @@
+import { AIButton } from "@/components/ai-button";
 import type { DynamicSegmentProps } from "@zenncore/types/navigation";
 import {
   CalendarIcon,
+  CircleCheckIcon,
+  DownloadIcon,
   FileContentIcon,
+  InfoIcon,
   LaptopChart,
   UsersIcon,
 } from "@zennui/icons";
 import { Button } from "@zennui/web/button";
+
 const submissionRequirements = [
   "Technical Specification",
   "Price Quote",
@@ -44,8 +49,10 @@ export default async ({ params }: DynamicSegmentProps) => {
               Reference Number: TQR-001-007
             </h3>
           </div>
-          <Button className="ml-auto">Evaluate Offers</Button>
-          <Button>AI Evaluation</Button>
+          <Button color="primary" className="ml-auto">
+            Evaluate Offers
+          </Button>
+          <AIButton>AI Evaluation</AIButton>
         </div>
       </div>
       <div className="flex gap-4 px-4 h-full">
@@ -72,7 +79,7 @@ export default async ({ params }: DynamicSegmentProps) => {
                   key={submissionRequirement}
                   className="flex gap-2 items-center text-foreground-dimmed"
                 >
-                  <LaptopChart className="fill-green-400" />
+                  <CircleCheckIcon className="fill-green-400" />
                   {submissionRequirement}
                 </p>
               ))}
@@ -84,7 +91,7 @@ export default async ({ params }: DynamicSegmentProps) => {
                   key={eligibilityCriteria}
                   className="flex gap-2 items-center text-foreground-dimmed"
                 >
-                  <LaptopChart className="fill-red-400" />
+                  <InfoIcon className="fill-red-400" />
                   {eligibilityCriteria}
                 </p>
               ))}
@@ -106,7 +113,7 @@ export default async ({ params }: DynamicSegmentProps) => {
                     </p>
                   </div>
                   <Button color="accent" className="ml-auto">
-                    <FileContentIcon className="fill-foreground-dimmed" />
+                    <DownloadIcon className="fill-foreground-dimmed" />
                     <p className="text-foreground-dimmed">Download</p>
                   </Button>
                 </div>

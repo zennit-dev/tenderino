@@ -1,29 +1,41 @@
 "use client";
 import { Sidebar, SidebarBody, SidebarLink } from "@/components/sidebar";
-import { ArrowLeftIcon, SettingsIcon, ShopIcon } from "@zennui/icons";
+import {
+  ArrowLeftIcon,
+  ChartCircleIcon,
+  SettingsIcon,
+  ShopIcon,
+} from "@zennui/icons";
 import { motion } from "motion/react";
 import Link from "next/link";
-import React, { useState } from "react";
+import { useState } from "react";
+
+const links = [
+  {
+    label: "Dashboard",
+    href: "/",
+    icon: <ChartCircleIcon className="h-5 w-5 shrink-0" />,
+  },
+  {
+    label: "Tenders",
+    href: "/tenders",
+    icon: <ShopIcon className="h-5 w-5 shrink-0" />,
+  },
+  {
+    label: "Settings",
+    href: "#",
+    icon: <SettingsIcon className="h-5 w-5 shrink-0" />,
+  },
+  {
+    label: "Logout",
+    href: "fefw",
+    icon: <ArrowLeftIcon className="h-5 w-5 shrink-0 " />,
+  },
+];
 
 export default () => {
-  const links = [
-    {
-      label: "Tenders",
-      href: "/tenders",
-      icon: <ShopIcon className="h-5 w-5 shrink-0" />,
-    },
-    {
-      label: "Settings",
-      href: "#",
-      icon: <SettingsIcon className="h-5 w-5 shrink-0" />,
-    },
-    {
-      label: "Logout",
-      href: "#",
-      icon: <ArrowLeftIcon className="h-5 w-5 shrink-0 " />,
-    },
-  ];
   const [open, setOpen] = useState(false);
+
   return (
     <Sidebar open={open} setOpen={setOpen}>
       <SidebarBody className="justify-between gap-10">
