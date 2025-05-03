@@ -1,18 +1,15 @@
 from rest_framework import serializers
 
-from tenders.models import DocumentTenderCriteria, Tender, TenderCriteria
+from tenders.models import DocumentTender, Tender, TenderCriteria
 
 
-class DocumentTenderCriteriaSerializer(serializers.ModelSerializer):
+class DocumentTenderSerializer(serializers.ModelSerializer):
     document_url = serializers.SerializerMethodField()
+    tender = serializers.PrimaryKeyRelatedField(queryset=Tender.objects.all())
 
     class Meta:
-        model = DocumentTenderCriteria
-        fields = [
-            "id",
-            "document_url",
-            "uploaded_at",
-        ]
+        model = DocumentTender
+        fields = ["id", "document_url", "uploaded_at", "tender"]
 
     def get_document_url(self, obj):
         request = self.context.get("request")
@@ -24,6 +21,8 @@ class DocumentTenderCriteriaSerializer(serializers.ModelSerializer):
 
 
 class TenderCriteriaSerializer(serializers.ModelSerializer):
+    tender = serializers.SerializerMethodField()
+
     class Meta:
         model = TenderCriteria
         fields = [
@@ -32,7 +31,11 @@ class TenderCriteriaSerializer(serializers.ModelSerializer):
             "type",
             "description",
             "weight",
+            "tender",
         ]
+
+    def get_tender(self, obj):
+        return obj.tender.id
 
 
 class TenderSerializer(serializers.ModelSerializer):
@@ -56,12 +59,8 @@ class TenderSerializer(serializers.ModelSerializer):
         )
 
     def get_tender_document(self, obj):
-        documents = DocumentTenderCriteria.objects.filter(
-            tender_criteria__tender_id=obj.id
-        )
-        return DocumentTenderCriteriaSerializer(
-            documents, many=True, context=self.context
-        ).data
+        documents = DocumentTender.objects.filter(tender=obj)
+        return DocumentTenderSerializer(documents, many=True, context=self.context).data
 
 
 class TenderWithDocumentsSerializer(serializers.ModelSerializer):
@@ -87,8 +86,8 @@ class TenderWithDocumentsSerializer(serializers.ModelSerializer):
         result = []
         for criterion in criteria:
             criterion_data = TenderCriteriaSerializer(criterion).data
-            documents = DocumentTenderCriteriaSerializer(
-                criterion.documenttendercriteria_set.all(),
+            documents = DocumentTenderSerializer(
+                obj.documents.all(),
                 many=True,
                 context=self.context,
             ).data

@@ -8,3 +8,4 @@ export const ROLES = Object.values(Role);
 export type Role = (typeof Role)[keyof typeof Role];
 
 export const ROLE_COOKIE_NAME = "role";
+export const AUTHENTICATION_COOKIE_NAME = "token";
