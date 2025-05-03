@@ -8,7 +8,6 @@ db.sqlite3
 db.sqlite3-journal
 .bash_history
 
-docker-compose.yml
 
 static
 media

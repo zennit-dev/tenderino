@@ -1,0 +1,55 @@
+services:
+  aadf_db:
+    image: postgres:latest
+    container_name: aadf_db
+    hostname: aadf_db
+    volumes:
+      - aadf-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: provider
+      POSTGRES_PASSWORD: provider
+      POSTGRES_DB: provider
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U provider" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  aadf_provider:
+    build:
+      context: .
+      target: 'development'
+    container_name: aadf_provider
+    hostname: aadf_provider
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/home/appuser
+    environment:
+      DEBUG: True
+      SECRET_KEY: c09%@tq@ip+s*s1j^@psz19yy_bfxw&u)3a*9eoib8t=1e&9
+      POSTGRES_DB: provider
+      POSTGRES_USER: provider
+      POSTGRES_PASSWORD: provider
+      POSTGRES_HOST: aadf_db
+      ACME_DOMAIN: localhost
+      # EMAIL_HOST: smtp.resend.com
+      # EMAIL_HOST_USER: resend
+      # EMAIL_HOST_PASSWORD: re_B6KVvdD3_J8euxas7SQ6cX1PCJtaPSnAu
+      # TWILIO_ACCOUNT_SID: ACb0e858dc5664e82dc13ed361bbc8a0b7
+      # TWILIO_AUTH_TOKEN: 9bfe35c5a6071f7da33fcbe1d2b59b6a
+      # TWILIO_MESSAGING_SERVICE_SID: MGadb540cb8608479fc8e9bbb0d71f6980
+      # CELERY_BROKER_URL: "redis://redis:6379/1"
+      # CELERY_RESULT_BACKEND: "redis://redis:6379/1"
+      # REDIS_HOST: "redis"
+      # REDIS_PORT: 6379
+      # REDIS_DATABASE: 1
+    depends_on:
+      aadf_db:
+        condition: service_healthy
+
+volumes:
+  aadf-data:
