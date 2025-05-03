@@ -1,10 +1,16 @@
 import { AIIcon } from "@zennui/icons";
-import { Button } from "@zennui/web/button";
-import type { PropsWithChildren } from "react";
+import { Button, type ButtonProps } from "@zennui/web/button";
+import { cn } from "@zenncore/utils";
 
-export const AIButton = ({ children }: PropsWithChildren) => {
+export const AIButton = ({ children, className, ...props }: ButtonProps) => {
   return (
-    <Button className="bg-gradient-to-r border-none from-[#289BD6] to-[#D82657]">
+    <Button
+      {...props}
+      className={cn(
+        "bg-gradient-to-r border-none from-[#289BD6] to-[#D82657]",
+        className
+      )}
+    >
       <AIIcon />
       {children}
     </Button>

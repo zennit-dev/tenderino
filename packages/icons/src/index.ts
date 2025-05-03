@@ -119,3 +119,4 @@ export * from "./hospital";
 export * from "./content";
 export * from "./log-in";
 export * from "./ai";
+export * from "./flag";

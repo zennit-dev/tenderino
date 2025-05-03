@@ -10,6 +10,8 @@ import {
   UsersIcon,
 } from "@zennui/icons";
 import { Button } from "@zennui/web/button";
+import Link from "next/link";
+
 
 const submissionRequirements = [
   "Technical Specification",
@@ -40,7 +42,7 @@ export default async ({ params }: DynamicSegmentProps) => {
   return (
     <div className="flex flex-col h-full overflow-x-hidden overflow-y-auto">
       <div className="flex px-4 flex-col gap-4 border-b border-border">
-        <div className="flex gap-4 items-center pb-4">
+        <div className="flex gap-2 items-center pb-4">
           <div>
             <h1 className="font-bold text-4xl">
               Interior Infrastructure Upgrade
@@ -49,9 +51,9 @@ export default async ({ params }: DynamicSegmentProps) => {
               Reference Number: TQR-001-007
             </h3>
           </div>
-          <Button color="primary" className="ml-auto">
-            Evaluate Offers
-          </Button>
+          <Link href={`/tenders/${id}/offers`} className="ml-auto">
+            <Button>Evaluate Offers</Button>
+          </Link>
           <AIButton>AI Evaluation</AIButton>
         </div>
       </div>
