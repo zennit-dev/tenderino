@@ -14,7 +14,9 @@ export default ({ children, action }: LayoutProps<"action">) => {
       <section className={"h-screen flex overflow-auto flex-col"}>
         <nav className={"h-12 w-full min-h-12"} />
         <section
-          className={"rounded-tl-lg bg-background grow w-full shadow-lg p-4"}
+          className={
+            "rounded-tl-lg bg-background grow w-full shadow-lg p-4 border border-border  overflow-y-auto overflow-x-hidden w-full min-h-[calc(100vh-theme(spacing.12))]"
+          }
         >
           {children}
         </section>
