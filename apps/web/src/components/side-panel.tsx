@@ -17,7 +17,6 @@ import { usePathname } from "next/navigation";
 export const SidePanel = () => {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
-  console.log(pathname);
   const [_, role] = pathname.split("/");
   const links = [
     {
