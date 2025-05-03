@@ -1,28 +1,25 @@
-import type { IconProps } from "@zenncore/types/components";
+import type { SVGProps } from "react";
 
-export const ClockIcon = (props: IconProps) => (
-  <svg
-    viewBox="0 0 24 24"
-    width={24}
-    height={24}
-    color={"currentColor"}
-    fill={"none"}
-    {...props}
-  >
-    <title>Clock</title>
-    <path
-      d="M18.952 8.60639L21.4621 8.45358C19.6628 3.70459 14.497 0.999731 9.46037 2.34456C4.09595 3.77692 0.909592 9.26089 2.34343 14.5933C3.77728 19.9258 9.28835 23.0874 14.6528 21.6551C18.6358 20.5916 21.418 17.2945 22 13.4842"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-    <path
-      d="M12 7.99982V11.9998L14 13.9998"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-);
+type IconProps = SVGProps<SVGSVGElement> & {
+  secondaryfill?: string;
+  strokewidth?: number;
+  title?: string;
+};
+
+export const ClockIcon = ({ ...props }: IconProps) => {
+  return (
+    <svg height="18" width="18" viewBox="0 0 18 18" {...props}>
+      <g>
+        <path
+          d="M1 9C1 4.58179 4.58179 1 9 1C13.4182 1 17 4.58179 17 9C17 13.4182 13.4182 17 9 17C4.58179 17 1 13.4182 1 9Z"
+          fillOpacity=".4"
+          fillRule="evenodd"
+        />
+        <path
+          d="M9 4C9.41421 4 9.75 4.33579 9.75 4.75V8.60704L12.6769 10.6334C13.0175 10.8691 13.1024 11.3363 12.8666 11.6769C12.6309 12.0175 12.1637 12.1024 11.8231 11.8666L8.57309 9.61664C8.37074 9.47656 8.25 9.24611 8.25 9V4.75C8.25 4.33579 8.58579 4 9 4Z"
+          fillRule="evenodd"
+        />
+      </g>
+    </svg>
+  );
+};

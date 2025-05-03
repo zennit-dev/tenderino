@@ -1,13 +1,7 @@
 import type { IconProps } from "@zenncore/types/components";
 
 export const AIIcon = (props: IconProps) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 18 18"
-    width={24}
-    height={24}
-    {...props}
-  >
+  <svg viewBox="0 0 18 18" width={24} height={24} {...props}>
     <g fill="currentColor">
       <path
         fillRule="evenodd"
@@ -16,7 +10,7 @@ export const AIIcon = (props: IconProps) => (
         fill="currentColor"
       />
       <path
-        fill-rule="evenodd"
+        fillRule="evenodd"
         clip-rule="evenodd"
         d="M11.25 1C11.5577 1 11.8343 1.188 11.9474 1.47418L13.245 4.75506L16.5258 6.05256C16.812 6.16574 17 6.44225 17 6.75C17 7.05775 16.812 7.33426 16.5258 7.44744L13.245 8.74494L11.9474 12.0258C11.8343 12.312 11.5577 12.5 11.25 12.5C10.9423 12.5 10.6657 12.312 10.5526 12.0258L9.25505 8.74494L5.97418 7.44744C5.688 7.33426 5.5 7.05775 5.5 6.75C5.5 6.44225 5.688 6.16574 5.97418 6.05256L9.25505 4.75506L10.5526 1.47418C10.6657 1.188 10.9423 1 11.25 1Z"
         fill="currentColor"

@@ -6,7 +6,7 @@ import { cva } from "class-variance-authority";
 import type { ComponentProps } from "react";
 
 export const buttonVariants = cva(
-  "box-border inline-flex w-fit items-center justify-center overflow-hidden whitespace-nowrap rounded-lg px-2.5 py-2 text-sm transition-all duration-300 active:scale-95",
+  "box-border inline-flex w-fit h-9 items-center justify-center overflow-hidden whitespace-nowrap rounded-lg px-2.5 py-2 text-sm transition-all duration-300 active:scale-95",
   {
     variants: {
       variant: {

@@ -1,64 +1,159 @@
 "use client";
-import { FlagIcon, XIcon } from "@zennui/icons";
-import { Tabs, TabsContent } from "@zennui/web/tabs";
+import {
+  field,
+  Form,
+  FormLabel,
+  FormControl,
+  FormField,
+  FormItem,
+  FormSubmitButton,
+  InferredForm,
+  useInferredForm,
+  InferredFormField,
+  FormDescription,
+  FormMessage,
+} from "@zennui/web/form";
+import { z } from "zod";
+import { AIButton } from "../ai-button";
+import { cn } from "@zenncore/utils";
+import type { Criteria } from "@/types/criteria";
+import { generateEvaluation } from "@/server/offer";
+import { useTransition } from "react";
+import { CheckIcon, StarIcon, XIcon } from "@zennui/icons";
+import type { Offer } from "@/types/offer";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-import Image from "next/image";
-import Link from "next/link";
 
 export const OfferForm = () => {
+  const config = Object.fromEntries(
+    criteria.map(({ id, name, description }) => [
+      id,
+      field({
+        label: name,
+        description,
+        shape: "slider",
+        constraint: z.number(),
+        min: 0,
+        max: 10,
+        step: 1,
+        defaultValue: 0,
+      }),
+    ])
+  );
+
+  const [isPending, startTransition] = useTransition();
+
+  const form = useInferredForm(config);
+
+  const handleAIEvaluation = async () => {
+    const evaluation = await generateEvaluation(criteria, offer);
+    for (const { id, score } of evaluation) {
+      form.setValue(id, score);
+    }
+  };
+
   const router = useRouter();
-  const [active, setActive] = useState("general");
 
   return (
-    <section className="size-full">
+    <main>
       <div>
         <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-bold">New Tender</h1>
+          <h1 className="text-2xl font-bold">Evaluate Tender Offers</h1>
           <XIcon onClick={router.back} />
         </div>
         <p className="text-sm text-muted-foreground">
-          Create a new tender to start a new procurement process.
+          Evaluate the offers for the tender.
         </p>
       </div>
       <hr className="my-4 bg-border border-border text-border" />
-      <Tabs value={active} onValueChange={setActive}>
-        <TabsContent value="general" className="flex flex-col gap-4">
-          {offers.map((company) => (
-            <div
-              key={company.id}
-              className="flex items-center gap-2 rounded-lg bg-accent"
-            >
-              <Image
-                src={company.logo}
-                alt={company.name}
-                width={100}
-                height={100}
+      <div className="flex flex-col gap-4">
+        <Form {...form}>
+          <form className={cn("flex flex-col gap-2.5")}>
+            {Object.entries(config).map(([key, props]) => (
+              <FormField
+                name={key}
+                key={key}
+                shouldUnregister
+                render={({ field }) => (
+                  <FormItem className={props.classList?.root}>
+                    <div className={cn("flex flex-col gap-1")}>
+                      <FormLabel className="capitalize text-primary-dimmed text-lg flex items-center gap-2">
+                        <StarIcon className="size-5 text-yellow-500" />
+                        {props.label}
+                        <span className="text-muted-foreground text-sm ml-auto">
+                          Weight{" "}
+                          {criteria.find((c) => c.id === Number(key))?.weight ??
+                            0}{" "}
+                          / 1
+                        </span>
+                      </FormLabel>
+                      <FormDescription>{props.description}</FormDescription>
+                      <FormControl>
+                        <InferredFormField
+                          {...field}
+                          {...props}
+                          className={props.className}
+                        />
+                      </FormControl>
+                    </div>
+                  </FormItem>
+                )}
               />
-              <h2>{company.name}</h2>
-              {company.isEvaluated ? (
-                <h3 className="flex items-center gap-2 text-success">
-                  <FlagIcon />
-                  <span>{company.score} / 100</span>
-                </h3>
-              ) : (
-                <Link href={`/offers/${company.id}/evaluate`}>Evaluate</Link>
-              )}
+            ))}
+            <div className={"flex w-full justify-end flex items-center gap-2"}>
+              <AIButton
+                onClick={() => startTransition(handleAIEvaluation)}
+                disabled={isPending}
+              >
+                {isPending ? "Evaluating..." : "Evaluate with AI"}
+              </AIButton>
+              <FormSubmitButton>
+                <CheckIcon />
+                Submit
+              </FormSubmitButton>
             </div>
-          ))}
-        </TabsContent>
-      </Tabs>
-    </section>
+          </form>
+        </Form>
+      </div>
+    </main>
   );
 };
 
-const offers = [
+const criteria: Criteria[] = [
   {
-    id: "1",
-    name: "Company 1",
-    logo: "https://via.placeholder.com/150",
-    description: "Company 1 description",
-    score: 10,
-    isEvaluated: false,
+    id: 1,
+    name: "Criteria 1",
+    type: "document",
+    description: "Description of the criteria",
+    weight: 1,
+  },
+  {
+    id: 2,
+    name: "Criteria 2",
+    type: "description",
+    description: "Description of the criteria",
+    weight: 1,
+  },
+  {
+    id: 3,
+    name: "Criteria 3",
+    type: "description",
+    description: "Description of the criteria",
+  },
+  {
+    id: 4,
+    name: "Criteria 4",
+    type: "description",
+    description: "Description of the criteria",
   },
 ];
+
+const offer: Offer = {
+  id: 1,
+  name: "Offer 1",
+  description: "Description of the offer",
+  score: 0,
+  isEvaluated: false,
+  attachments: [],
+  inquiry: "Inquiry 1",
+  logo: "https://via.placeholder.com/150",
+};

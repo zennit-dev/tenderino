@@ -1,29 +1,47 @@
 "use client";
+
 import { Sidebar, SidebarBody, SidebarLink } from "@/components/sidebar";
-import { ArrowLeftIcon, SettingsIcon, ShopIcon } from "@zennui/icons";
+import {
+  ArrowLeftIcon,
+  ChartCircleIcon,
+  SettingsIcon,
+  ShopIcon,
+  UsersIcon,
+} from "@zennui/icons";
 import { motion } from "motion/react";
 import Link from "next/link";
-import React, { useState } from "react";
+import { useState } from "react";
+import Image from "next/image";
+import { usePathname } from "next/navigation";
 
-export default () => {
+export const SidePanel = () => {
+  const [open, setOpen] = useState(false);
+  const pathname = usePathname();
+  console.log(pathname);
+  const [_, role] = pathname.split("/");
   const links = [
     {
+      label: "Dashboard",
+      href: `/${role}`,
+      icon: <ChartCircleIcon className="h-5 w-5 shrink-0" />,
+    },
+    {
       label: "Tenders",
-      href: "/tenders",
+      href: `/${role}/tenders`,
       icon: <ShopIcon className="h-5 w-5 shrink-0" />,
+    },
+    {
+      label: "Vendor",
+      href: `/${role}/vendors`,
+      icon: <UsersIcon className="h-5 w-5 shrink-0" />,
     },
     {
       label: "Settings",
       href: "#",
       icon: <SettingsIcon className="h-5 w-5 shrink-0" />,
     },
-    {
-      label: "Logout",
-      href: "#",
-      icon: <ArrowLeftIcon className="h-5 w-5 shrink-0 " />,
-    },
   ];
-  const [open, setOpen] = useState(false);
+
   return (
     <Sidebar open={open} setOpen={setOpen}>
       <SidebarBody className="justify-between gap-10">
@@ -62,13 +80,19 @@ export const Logo = () => {
       href="/"
       className="relative z-20 flex items-center space-x-2 py-1 text-sm font-normal text-black"
     >
-      <div className="h-5 w-6 shrink-0 rounded-tl-lg rounded-tr-sm rounded-br-lg rounded-bl-sm bg-black dark:bg-white" />
+      <Image
+        src="/images/logo.png"
+        alt="AADF"
+        width={50}
+        height={50}
+        className="size-[30px] min-w-[30px]"
+      />
       <motion.span
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         className="font-medium whitespace-pre text-black dark:text-white"
       >
-        Acet Labs
+        AADF
       </motion.span>
     </Link>
   );
@@ -79,7 +103,13 @@ export const LogoIcon = () => {
       href="/"
       className="relative z-20 flex items-center space-x-2 py-1 text-sm font-normal text-black"
     >
-      <div className="h-5 w-6 shrink-0 rounded-tl-lg rounded-tr-sm rounded-br-lg rounded-bl-sm bg-black dark:bg-white" />
+      <Image
+        src="/images/logo.png"
+        alt="AADF"
+        width={50}
+        height={50}
+        className="size-[30px] min-w-[30px]"
+      />
     </Link>
   );
 };

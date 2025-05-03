@@ -11,7 +11,12 @@ export default {
     ignoreBuildErrors: true,
   },
   images: {
-    remotePatterns: [],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "via.placeholder.com",
+      },
+    ],
   },
   experimental: {
     useCache: true,

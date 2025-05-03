@@ -1,33 +1,22 @@
-import type { IconProps } from "@zenncore/types/components";
+import type { SVGProps } from "react";
 
-export const InfoIcon = (props: IconProps) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 24 24"
-    width={24}
-    height={24}
-    color={"currenColor"}
-    fill={"none"}
-    {...props}
-  >
-    <path
-      d="M22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12Z"
-      stroke="currentColor"
-      strokeWidth="1.5"
-    />
-    <path
-      d="M12.2422 17V12C12.2422 11.5286 12.2422 11.2929 12.0957 11.1464C11.9493 11 11.7136 11 11.2422 11"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-    <path
-      d="M11.992 8H12.001"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-);
+type IconProps = SVGProps<SVGSVGElement> & {
+  secondaryfill?: string;
+  strokewidth?: number;
+  title?: string;
+};
+
+export const InfoIcon = ({ ...props }: IconProps) => {
+  return (
+    <svg height="18" width="18" viewBox="0 0 18 18" {...props}>
+      <g>
+        <path
+          d="M9.00009 17C13.4184 17 17.0001 13.4183 17.0001 9C17.0001 4.58172 13.4184 1 9.00009 1C4.58181 1 1.00009 4.58172 1.00009 9C1.00009 13.4183 4.58181 17 9.00009 17Z"
+          opacity=".4"
+        />
+        <path d="M9.00009 13.5688C8.58599 13.5688 8.25009 13.2329 8.25009 12.8188V8.5C8.25009 8.0859 8.58599 7.75 9.00009 7.75C9.41419 7.75 9.75009 8.0859 9.75009 8.5V12.8188C9.75009 13.2329 9.41419 13.5688 9.00009 13.5688Z" />
+        <path d="M9.00009 6.75C8.44809 6.75 8.00009 6.301 8.00009 5.75C8.00009 5.199 8.44809 4.75 9.00009 4.75C9.55209 4.75 10.0001 5.199 10.0001 5.75C10.0001 6.301 9.55209 6.75 9.00009 6.75Z" />
+      </g>
+    </svg>
+  );
+};
