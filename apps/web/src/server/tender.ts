@@ -1,4 +1,6 @@
 "use server";
+import type { Tender } from "@/types/tender";
+import { resource } from "@/utils/resource";
 import { OpenAI } from "openai";
 import { zodFunction } from "openai/helpers/zod";
 import { z } from "zod";
@@ -54,3 +56,5 @@ export const generateCriteria = async ({
       .parsed_arguments as z.infer<typeof schema>
   )?.criteria;
 };
+
+export const { getById, create, paginate } = resource<Tender>("/tenders");

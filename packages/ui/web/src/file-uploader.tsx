@@ -194,7 +194,7 @@ export const FileUploader = ({
       }
     },
 
-    [files, maxFiles, multiple, onUpload, setFiles],
+    [files, maxFiles, multiple, onUpload, setFiles]
   );
 
   const onRemove = (removedFileId: string) => {
@@ -219,7 +219,7 @@ export const FileUploader = ({
   const isDisabled = disabled || (files?.length ?? 0) >= maxFiles;
 
   return (
-    <div className="relative flex flex-col gap-6 overflow-hidden bg-accent">
+    <div className="relative flex flex-col gap-6 overflow-hidden ">
       <Dropzone
         onDrop={onDrop}
         accept={accept}
@@ -236,7 +236,7 @@ export const FileUploader = ({
               "ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
               isDragActive && "border-foreground-dimmed/50",
               isDisabled && "pointer-events-none opacity-60",
-              className,
+              className
             )}
             {...dropzoneProps}
           >
@@ -268,7 +268,11 @@ export const FileUploader = ({
                   <p className="text-foreground-dimmed/70 text-sm">
                     You can upload
                     {maxFiles > 1
-                      ? ` ${maxFiles === Number.POSITIVE_INFINITY ? "multiple" : maxFiles}
+                      ? ` ${
+                          maxFiles === Number.POSITIVE_INFINITY
+                            ? "multiple"
+                            : maxFiles
+                        }
                       files (up to ${formatBytes(maxSize)} each)`
                       : ` a file with ${formatBytes(maxSize)}`}
                   </p>
@@ -283,7 +287,6 @@ export const FileUploader = ({
           <ScrollArea
             className="h-fit w-full px-3"
             classList={{
-              root: "bg-background-dimmed",
               scrollbar: {
                 thumb: "bg-red-500",
               },
@@ -340,7 +343,7 @@ const FileCard = (props: FileCardProps) => {
       style={{ y, boxShadow }}
       dragListener={false}
       dragControls={controls}
-      className={"rounded-lg bg-transparent"}
+      className={"rounded-lg bg-transparent border border-border"}
     >
       <FileCardContent
         dragControls={props.isDraggable ? controls : undefined}
@@ -370,8 +373,8 @@ const FileCardContent = ({
   return (
     <div
       className={cn(
-        "relative flex select-none items-center space-x-4 rounded-lg bg-background p-3 shadow dark:shadow-black/40",
-        className,
+        "relative flex select-none items-center space-x-4 rounded-lg bg-background p-3",
+        className
       )}
     >
       <div className="flex flex-1 space-x-4">
@@ -423,7 +426,7 @@ const FileCardContent = ({
 const DragHandle = ({ dragControls }: { dragControls: DragControls }) => {
   return (
     <div
-      className="flex w-3 flex-1 cursor-[var(--cursor,pointer)] touch-none appearance-none items-center justify-center rounded-lg border-[none] bg-transparent p-4 outline-none hover:bg-background-dimmed focus-visible:shadow-[0_0px_0px_2px_#4c9ffe]"
+      className="flex w-3 flex-1 cursor-[var(--cursor,pointer)] touch-none appearance-none items-center justify-center rounded-lg border-[none] bg-transparent p-4 outline-none focus-visible:shadow-[0_0px_0px_2px_#4c9ffe]"
       onPointerDown={(e) => dragControls.start(e)}
     >
       <svg

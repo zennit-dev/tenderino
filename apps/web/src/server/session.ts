@@ -1,8 +1,10 @@
 "use server";
-import { ROLE_COOKIE_NAME, type Role } from "@/constants";
+import {
+  AUTHENTICATION_COOKIE_NAME,
+  ROLE_COOKIE_NAME,
+  type Role,
+} from "@/constants";
 import { cookies, headers } from "next/headers";
-
-const AUTHENTICATION_COOKIE_NAME = "token";
 
 export const getAuthenticationToken = async () => {
   const cookieJar = await cookies();

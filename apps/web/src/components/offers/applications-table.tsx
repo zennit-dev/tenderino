@@ -2,13 +2,13 @@
 import { FlagIcon, LogInIcon, XIcon } from "@zennui/icons";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@zennui/web/tabs";
 import { useRouter } from "next/navigation";
-import { Fragment, useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Progress } from "@zennui/web/progress";
-import type { Offer } from "@/types/offer";
+import type { Application } from "@/types/application";
 
-export const OffersView = () => {
+export const ApplicationsTable = () => {
   const router = useRouter();
   const [active, setActive] = useState("offers");
 
@@ -112,7 +112,7 @@ export const OffersView = () => {
   );
 };
 
-const offers: Offer[] = [
+const offers: Application[] = [
   {
     id: 1,
     name: "Company 1",

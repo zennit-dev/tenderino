@@ -1,5 +1,5 @@
 "use client";
-import { signIn } from "@/actions/auth";
+import { signIn } from "@/server/auth";
 import { LogInIcon } from "@zennui/icons";
 import {
   FormSubmitButton,
