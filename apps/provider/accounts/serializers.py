@@ -9,6 +9,7 @@ from provider.settings import SENDER_EMAIL
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, style={"input_type": "password"})
     isActive = serializers.BooleanField(read_only=True, source="is_active")
+    email = serializers.EmailField(required=True)
 
     class Meta:
         model = User
@@ -19,9 +20,13 @@ class UserSerializer(serializers.ModelSerializer):
             "temp_login_id",
             "password",
             "access",
-            "status",
             "isActive",
         )
+
+    def validate_email(self, value):
+        if User.objects.filter(email=value).exists():
+            raise ValidationError("A user with this email already exists.")
+        return value
 
     def create(self, validated_data: dict) -> User:
         keys = [
@@ -29,7 +34,6 @@ class UserSerializer(serializers.ModelSerializer):
             "email",
             "password",
             "access",
-            "status",
         ]
         new_validated_data = {
             key: validated_data[key] for key in keys if key in validated_data
