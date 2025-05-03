@@ -1,14 +1,22 @@
 "use client";
 import type { Vendor } from "@/types/vendor";
-import { createColumnHelper } from "@tanstack/react-table";
+import {
+  type ColumnDef,
+  type ColumnHelper,
+  createColumnHelper,
+} from "@tanstack/react-table";
 import { DataTableProvider } from "@zenncore/components/data-table";
 import { DataTable, DataTablePagination } from "@zennui/web/data-table";
 
-export const VendorTable = () => {
+type VendorTableProps = {
+  buildColumns: (columnHelper: ColumnHelper<Vendor>) => ColumnDef<Vendor>[];
+};
+export const VendorTable = ({ buildColumns }: VendorTableProps) => {
+  const additions = buildColumns(column);
   return (
-    <DataTableProvider columns={columns} rows={data}>
+    <DataTableProvider columns={[...columns, ...additions]} rows={data}>
       <DataTable />
-      <DataTablePagination />
+      <DataTablePagination className="ml-auto" />
     </DataTableProvider>
   );
 };
