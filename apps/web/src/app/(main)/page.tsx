@@ -153,8 +153,8 @@ export default () => {
               <p className="text-foreground-dimmed">May 2025</p>
               <div>
                 <div className="flex gap-4 items-center border-b border-border pb-4">
-                  <p className="text-primary bg-primary/10 py-2 font-bold text-2xl aspect-square px-4 w-fit rounded-full aspect-square">
-                    5
+                  <p className="text-primary bg-primary/10 font-bold text-2xl size-13 text-center justify-center items-center flex rounded-full aspect-square">
+                    4
                   </p>
                   <div className="flex-1">
                     <p>IT Infrastructure Upgrade</p>
@@ -165,7 +165,7 @@ export default () => {
               </div>
               <div>
                 <div className="flex gap-4 items-center">
-                  <p className="text-primary bg-primary/10 py-2 font-bold text-2xl aspect-square px-4 w-fit rounded-full aspect-square">
+                  <p className="text-primary bg-primary/10  font-bold text-2xl text-center size-13 justify-center items-center flex rounded-full aspect-square">
                     5
                   </p>
                   <div className="flex-1">
@@ -180,7 +180,7 @@ export default () => {
               <p className="text-foreground-dimmed">June 2025</p>
               <div>
                 <div className="flex gap-4 items-center border-b border-border pb-4">
-                  <p className="text-primary items-center flex bg-primary/10 py-2 font-bold text-2xl aspect-square px-4 w-fit rounded-full aspect-square">
+                  <p className="text-primary items-center flex bg-primary/10 font-bold text-2xl size-13 justify-center items-center flex rounded-full aspect-square">
                     17
                   </p>
                   <div className="flex-1">
@@ -192,7 +192,7 @@ export default () => {
               </div>
               <div>
                 <div className="flex gap-4 items-center">
-                  <p className="text-primary items-center flex bg-primary/10 py-2 font-bold text-2xl aspect-square px-4 w-fit rounded-full aspect-square">
+                  <p className="text-primary items-center bg-primary/10 font-bold text-2xl size-13 justify-center items-center flex rounded-full aspect-square">
                     22
                   </p>
                   <div className="flex-1">

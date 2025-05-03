@@ -32,7 +32,7 @@ export const TenderCard = ({
   return (
     <div
       className={cn(
-        "flex w-[calc(33%-theme(spacing.4))] flex-col gap-2 border border-border py-4 rounded-lg",
+        "flex flex-col gap-2 border border-border py-4 rounded-lg",
         className,
       )}
     >

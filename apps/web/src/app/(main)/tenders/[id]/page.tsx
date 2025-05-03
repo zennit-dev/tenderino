@@ -12,7 +12,6 @@ import {
 import { Button } from "@zennui/web/button";
 import Link from "next/link";
 
-
 const submissionRequirements = [
   "Technical Specification",
   "Price Quote",
@@ -52,7 +51,7 @@ export default async ({ params }: DynamicSegmentProps) => {
             </h3>
           </div>
           <Link href={`/tenders/${id}/offers`} className="ml-auto">
-            <Button>Evaluate Offers</Button>
+            <Button color="primary">Evaluate Offers</Button>
           </Link>
           <AIButton>AI Evaluation</AIButton>
         </div>

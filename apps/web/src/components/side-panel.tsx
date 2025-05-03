@@ -1,10 +1,12 @@
 "use client";
+
 import { Sidebar, SidebarBody, SidebarLink } from "@/components/sidebar";
 import {
   ArrowLeftIcon,
   ChartCircleIcon,
   SettingsIcon,
   ShopIcon,
+  UsersIcon,
 } from "@zennui/icons";
 import { motion } from "motion/react";
 import Link from "next/link";
@@ -20,6 +22,11 @@ const links = [
     label: "Tenders",
     href: "/tenders",
     icon: <ShopIcon className="h-5 w-5 shrink-0" />,
+  },
+  {
+    label: "Vendor",
+    href: "/vendors",
+    icon: <UsersIcon className="h-5 w-5 shrink-0" />,
   },
   {
     label: "Settings",

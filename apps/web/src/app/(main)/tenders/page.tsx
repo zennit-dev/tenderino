@@ -61,7 +61,11 @@ export default () => {
       </div>
       <div className="flex-row flex gap-4 flex-wrap">
         {TENDERS.map((tender) => (
-          <TenderCard key={tender.id} {...tender} />
+          <TenderCard
+            key={tender.id}
+            {...tender}
+            className="w-[calc(33%-theme(spacing.4))]"
+          />
         ))}
       </div>
     </div>
