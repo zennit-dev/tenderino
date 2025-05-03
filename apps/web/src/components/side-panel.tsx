@@ -4,6 +4,7 @@ import { Sidebar, SidebarBody, SidebarLink } from "@/components/sidebar";
 import {
   ArrowLeftIcon,
   ChartCircleIcon,
+  LogOutIcon,
   SettingsIcon,
   ShopIcon,
   UsersIcon,
@@ -18,28 +19,38 @@ export const SidePanel = () => {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
   const [_, role] = pathname.split("/");
-  const links = [
-    {
-      label: "Dashboard",
-      href: `/${role}`,
-      icon: <ChartCircleIcon className="h-5 w-5 shrink-0" />,
-    },
-    {
-      label: "Tenders",
-      href: `/${role}/tenders`,
-      icon: <ShopIcon className="h-5 w-5 shrink-0" />,
-    },
-    {
-      label: "Vendor",
-      href: `/${role}/vendors`,
-      icon: <UsersIcon className="h-5 w-5 shrink-0" />,
-    },
-    {
-      label: "Settings",
-      href: "#",
-      icon: <SettingsIcon className="h-5 w-5 shrink-0" />,
-    },
-  ];
+
+  const links =
+    role === "vendor"
+      ? [
+          {
+            label: "Tenders",
+            href: `/${role}/tenders`,
+            icon: <ShopIcon className="h-5 w-5 shrink-0" />,
+          },
+        ]
+      : [
+          {
+            label: "Dashboard",
+            href: `/${role}`,
+            icon: <ChartCircleIcon className="h-5 w-5 shrink-0" />,
+          },
+          {
+            label: "Tenders",
+            href: `/${role}/tenders`,
+            icon: <ShopIcon className="h-5 w-5 shrink-0" />,
+          },
+          {
+            label: "Vendor",
+            href: `/${role}/vendors`,
+            icon: <UsersIcon className="h-5 w-5 shrink-0" />,
+          },
+          {
+            label: "Settings",
+            href: "#",
+            icon: <SettingsIcon className="h-5 w-5 shrink-0" />,
+          },
+        ];
 
   return (
     <Sidebar open={open} setOpen={setOpen}>
@@ -53,6 +64,13 @@ export const SidePanel = () => {
           </div>
         </div>
         <div>
+          <SidebarLink
+            link={{
+              label: "Sign Out",
+              href: "#",
+              icon: <LogOutIcon />,
+            }}
+          />
           <SidebarLink
             link={{
               label: "Manu Arora",
@@ -84,7 +102,7 @@ export const Logo = () => {
         alt="AADF"
         width={50}
         height={50}
-        className="size-[30px] min-w-[30px]"
+        className="size-[28px] min-w-[28px]"
       />
       <motion.span
         initial={{ opacity: 0 }}
@@ -107,7 +125,7 @@ export const LogoIcon = () => {
         alt="AADF"
         width={50}
         height={50}
-        className="size-[30px] min-w-[30px]"
+        className="size-[28px] min-w-[28px]"
       />
     </Link>
   );
