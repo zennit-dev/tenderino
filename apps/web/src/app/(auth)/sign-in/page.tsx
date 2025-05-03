@@ -1,22 +1,28 @@
 "use client";
+import { signIn } from "@/actions/auth";
+import { LogInIcon } from "@zennui/icons";
 import {
-  field,
   FormSubmitButton,
   InferredForm,
   type InferredFormFields,
+  field,
 } from "@zennui/web/form";
-import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { z } from "zod";
 import Link from "next/link";
-import { LogInIcon } from "@zennui/icons";
+import { useRouter } from "next/navigation";
+import { z } from "zod";
 
 export default () => {
   const router = useRouter();
 
-  const handleSubmit = (data: InferredFormFields<typeof config>) => {
+  const handleSubmit = async (data: InferredFormFields<typeof config>) => {
     console.log(data);
-    router.push("/");
+
+    const response = await signIn(data);
+
+    if (!response.success) return;
+
+    router.push(response.data.redirect);
   };
 
   return (
