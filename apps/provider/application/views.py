@@ -34,7 +34,7 @@ class ApplicationViewSet(viewsets.ModelViewSet):
         application_data_json = request.data.get("applicationData")
         if not application_data_json:
             return Response(
-                {"error": "applicationData is required"},
+                {"error": "applicationData is required"},  
                 status=status.HTTP_400_BAD_REQUEST,
             )
         try:
