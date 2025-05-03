@@ -3,11 +3,7 @@ from rest_framework import routers
 
 from accounts.views import (
     ChangePassword,
-    CreateApplication,
-    CreateUser,
     CurrentUser,
-    EditApplication,
-    ListApplications,
     RequestResetPassword,
     ResetPassword,
     SignIn,
@@ -41,11 +37,6 @@ urlpatterns = [
     ),
     # Total users
     path("total-users/", get_total_users, name="total-users"),
-    # Applications
-    path("apply/", CreateApplication.as_view(), name="create-application"),
-    path("applications/", ListApplications.as_view(), name="list-applications"),
-    path("applications/<int:pk>/", EditApplication.as_view(), name="edit-application"),
-    # Admin user management
-    path("admin/create-user/", CreateUser.as_view(), name="admin-create-user"),
 ]
+
 urlpatterns += router.urls

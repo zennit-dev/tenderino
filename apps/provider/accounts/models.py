@@ -73,25 +73,6 @@ class UserManager(BaseUserManager):
         return user
 
 
-class UserApplication(models.Model):
-    name = models.CharField(max_length=50)
-    surname = models.CharField(max_length=50)
-    business_name = models.CharField(max_length=100)
-    nipt = models.CharField(max_length=20, unique=True)  # Document number
-    phone_number = models.CharField(max_length=15)
-    email = models.EmailField(unique=True, max_length=255)
-    password = models.CharField(
-        max_length=255
-    )  # Will be used to create user after approval
-    created_at = models.DateTimeField(auto_now_add=True)
-    status = models.CharField(
-        max_length=9, choices=UserStatus.choices, default=UserStatus.PENDING
-    )
-
-    def __str__(self) -> str:
-        return f"{self.business_name} - {self.nipt}"
-
-
 class User(AbstractBaseUser, PermissionsMixin):
     name = models.CharField(max_length=50, null=True, blank=True)
     email = models.EmailField(unique=True, max_length=255)
