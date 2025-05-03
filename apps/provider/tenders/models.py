@@ -50,12 +50,12 @@ class TenderCriteria(models.Model):
         return f"{self.tender.title} - {self.category}"
 
 
-class DocumentTenderCriteria(models.Model):
-    tender_criteria = models.ForeignKey(
-        TenderCriteria, related_name="documents", on_delete=models.CASCADE
+class DocumentTender(models.Model):
+    tender = models.ForeignKey(
+        Tender, related_name="documents", on_delete=models.CASCADE
     )
-    document = models.FileField(upload_to="criteria_documents/")
+    document = models.FileField(upload_to="tender_documents/")
     uploaded_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Document for {self.tender_criteria}"
+        return f"Document for {self.tender}"

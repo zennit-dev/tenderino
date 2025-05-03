@@ -3,14 +3,21 @@ import json
 from rest_framework import parsers, status, viewsets
 from rest_framework.response import Response
 
-from .models import DocumentTenderCriteria, Tender, TenderCriteria
-from .serializers import TenderSerializer
+from provider.views import QuerySetPagination
+
+from .models import DocumentTender, Tender, TenderCriteria
+from .serializers import (
+    DocumentTenderSerializer,
+    TenderCriteriaSerializer,
+    TenderSerializer,
+)
 
 
 class TenderViewSet(viewsets.ModelViewSet):
     queryset = Tender.objects.all()
     serializer_class = TenderSerializer
     parser_classes = [parsers.MultiPartParser, parsers.FormParser]
+    pagination_class = QuerySetPagination
 
     def create(self, request, *args, **kwargs):
         tender_data_json = request.data.get("tenderData")
@@ -28,19 +35,26 @@ class TenderViewSet(viewsets.ModelViewSet):
 
         criteria_data = tender_data.pop("criteria", [])
         tender = Tender.objects.create(**tender_data)
-        criteria_objs = []
-        for crit in criteria_data:
-            crit_obj = TenderCriteria.objects.create(tender=tender, **crit)
-            criteria_objs.append(crit_obj)
 
-        # Attach each uploaded file to the corresponding TenderCriteria by index
+        # Create criteria
+        for crit in criteria_data:
+            TenderCriteria.objects.create(tender=tender, **crit)
+
+        # Handle document uploads
         files = request.FILES
-        for idx, crit_obj in enumerate(criteria_objs):
-            file_key = f"document_criteria[{idx}][document]"
-            if file_key in files:
-                DocumentTenderCriteria.objects.create(
-                    tender_criteria=crit_obj, document=files[file_key]
-                )
+        for idx, file_key in enumerate(files):
+            if file_key.startswith("document_criteria["):
+                DocumentTender.objects.create(tender=tender, document=files[file_key])
 
         serializer = self.get_serializer(tender, context={"request": request})
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+class TenderCriteriaViewSet(viewsets.ModelViewSet):
+    queryset = TenderCriteria.objects.all()
+    serializer_class = TenderCriteriaSerializer
+
+
+class DocumentTenderViewSet(viewsets.ModelViewSet):
+    queryset = DocumentTender.objects.all()
+    serializer_class = DocumentTenderSerializer
