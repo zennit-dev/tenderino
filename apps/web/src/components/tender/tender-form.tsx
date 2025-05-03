@@ -14,7 +14,8 @@ import { useState, useTransition } from "react";
 import { z } from "zod";
 import { v4 as uuid } from "uuid";
 import { AIButton } from "../ai-button";
-import { generateCriteria } from "@/server/tender";
+import { create, generateCriteria } from "@/server/tender";
+import { Tender } from "@/types/tender";
 
 export const TenderForm = () => {
   const router = useRouter();
@@ -29,7 +30,8 @@ export const TenderForm = () => {
     requirments: [],
     documents: null,
   });
-  const [transition, startTransition] = useTransition();
+  const [isAIPending, startAITransition] = useTransition();
+  const [isSubmissionPending, startSubmissionTransition] = useTransition();
 
   const handleGeneralSubmit = (data: InferredFormFields<typeof general>) => {
     setActive("requirments");
@@ -39,22 +41,43 @@ export const TenderForm = () => {
     });
   };
 
-  const handleRequirmentSubmit = (
-    data: InferredFormFields<typeof requirment>
-  ) => {
+  const handleRequirmentSubmit = () => {
     setActive("documents");
-    setForm({
-      ...form,
-      requirments: [...form.requirments, data],
-    });
   };
 
-  const handleDocumentSubmit = (data: InferredFormFields<typeof document>) => {
-    console.log(data);
+  const handleDocumentSubmit = async (
+    data: InferredFormFields<typeof document>
+  ) => {
     setForm({
       ...form,
       documents: data,
     });
+
+    if (!form.general) return;
+    if (!form.requirments) return;
+    if (!data.document) return;
+
+    const request = new FormData();
+
+    request.append(
+      "tenderData",
+      JSON.stringify({
+        title: form.general.title,
+        description: form.general.description,
+        expire_date:
+          form.general.period.end?.toISOString() ?? new Date().toISOString(),
+        open_date:
+          form.general.period.start?.toISOString() ?? new Date().toISOString(),
+        max_amount: form.general.budget,
+        criteria: form.requirments,
+      })
+    );
+
+    form.documents?.document.forEach((document, index) => {
+      request.append(`documents[${index}][document]`, document);
+    });
+
+    await create<FormData>(request);
   };
 
   const handleAIGeneration = async () => {
@@ -98,11 +121,7 @@ export const TenderForm = () => {
         <TabsContent value="requirments" className="flex flex-col gap-4 py-4">
           {form.requirments.map((value) => (
             <div key={value.title}>
-              <InferredForm
-                config={requirment}
-                defaultValues={value}
-                onSubmit={handleRequirmentSubmit}
-              />
+              <InferredForm config={requirment} defaultValues={value} />
             </div>
           ))}
           <Button
@@ -128,21 +147,26 @@ export const TenderForm = () => {
           </Button>
           <AIButton
             className="w-full"
-            onClick={() => startTransition(handleAIGeneration)}
-            disabled={transition}
+            onClick={() => startAITransition(handleAIGeneration)}
+            disabled={isAIPending}
           >
-            {transition ? "Generating..." : "Generate with AI"}
+            {isAIPending ? "Generating..." : "Generate with AI"}
           </AIButton>
-          <Button className="ml-auto">
+          <Button className="ml-auto" onClick={handleRequirmentSubmit}>
             <LogInIcon />
             Continue to Documents
           </Button>
         </TabsContent>
         <TabsContent value="documents">
-          <InferredForm config={document} onSubmit={handleDocumentSubmit}>
+          <InferredForm
+            config={document}
+            onSubmit={(data) =>
+              startSubmissionTransition(() => handleDocumentSubmit(data))
+            }
+          >
             <FormSubmitButton>
               <CheckIcon />
-              Submit
+              {isSubmissionPending ? "Submitting..." : "Submit"}
             </FormSubmitButton>
           </InferredForm>
         </TabsContent>

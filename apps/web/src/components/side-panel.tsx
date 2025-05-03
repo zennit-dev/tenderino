@@ -10,10 +10,10 @@ import {
   UsersIcon,
 } from "@zennui/icons";
 import { motion } from "motion/react";
-import Link from "next/link";
-import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
 
 export const SidePanel = () => {
   const [open, setOpen] = useState(false);
@@ -107,7 +107,10 @@ export const Logo = () => {
       <motion.span
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="font-medium whitespace-pre text-black dark:text-white"
+        transition={{
+          duration: 1,
+        }}
+        className="font-medium whitespace-pre text-black"
       >
         AADF
       </motion.span>

@@ -1,5 +1,5 @@
 "use client";
-import { signIn } from "@/actions/auth";
+import { signIn } from "@/server/auth";
 import { LogInIcon } from "@zennui/icons";
 import {
   FormSubmitButton,
@@ -20,7 +20,7 @@ export default () => {
 
     const response = await signIn(data);
 
-    if (!response.success) return;
+    if (!response.success || !response.data.redirect) return;
 
     router.push(response.data.redirect);
   };
