@@ -68,6 +68,7 @@ INSTALLED_APPS = [
     # Apps
     "accounts",
     "tenders",
+    "application",
 ]
 
 APPEND_SLASH = False
