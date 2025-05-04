@@ -58,12 +58,12 @@ export const SidePanel = () => {
           },
           {
             label: "Conference",
-            href: `/evaluation/conference`,
+            href: "/evaluation/conference",
             icon: <CallIcon className="h-5 w-5 shrink-0 text-neutral" />,
           },
           {
             label: "Board",
-            href: `/evaluation/board`,
+            href: "/evaluation/board",
             icon: <EditIcon className="h-5 w-5 shrink-0 text-neutral" />,
           },
           {
