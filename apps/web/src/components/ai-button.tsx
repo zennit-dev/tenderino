@@ -1,3 +1,4 @@
+"use client";
 import { AIIcon } from "@zennui/icons";
 import { Button, type ButtonProps } from "@zennui/web/button";
 import { cn } from "@zenncore/utils";

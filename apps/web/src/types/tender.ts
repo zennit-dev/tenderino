@@ -6,7 +6,7 @@ export type Tender = Metadata & {
   title: string;
   description: string;
   criteria: Criteria[];
-  attachments: Attachment[];
+  tender_document: Attachment[];
   open_date: string;
   expire_date: string;
   max_amount: number;

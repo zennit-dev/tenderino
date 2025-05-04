@@ -151,6 +151,7 @@ export default () => {
             {TENDERS.map((tender) => (
               <TenderCard
                 key={tender.id}
+                href={`/procurment/tenders/${tender.id}`}
                 {...tender}
                 className="min-w-[calc(50%-theme(spacing.4))]"
               />

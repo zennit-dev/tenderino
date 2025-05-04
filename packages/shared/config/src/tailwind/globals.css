@@ -114,3 +114,30 @@
     -moz-appearance: textfield;
   }
 }
+
+@custom-variant dark (&:where(.dark, .dark *));
+@variant dark {
+  /* background shades - dark theme */
+  --color-background-dimmed: hsl(0 0% 8%); /* Darker */
+  --color-background: hsl(0 0% 12%); /* Base dark */
+  --color-background-rich: hsl(0 0% 15%); /* Darkest */
+
+  /* foreground shades - light grays for dark theme */
+  --color-foreground-dimmed: hsl(0 0% 85%); /* Lighter */
+  --color-foreground: hsl(0 0% 95%); /* Base light */
+  --color-foreground-rich: hsl(0 0% 100%); /* Lightest */
+
+  /* emphasis shades - lighter for dark theme */
+  --color-emphasis-dimmed: hsl(0 0% 95%); /* Lightest */
+  --color-emphasis: hsl(0 0% 90%); /* Lighter */
+  --color-emphasis-rich: hsl(0 0% 85%); /* Slightly darker */
+
+  /* accent shades - darker for dark theme */
+  --color-accent-dimmed: hsl(0 0% 8%); /* Darkest */
+  --color-accent: hsl(0 0% 12%); /* Dark */
+  --color-accent-rich: hsl(0 0% 15%); /* Darker */
+  --color-accent-foreground: hsl(0 0% 85%); /* Lighter for contrast */
+
+  /* border color for dark theme */
+  --color-border: hsl(0 0% 20%); /* Darker for better visibility in dark mode */
+}

@@ -1,15 +1,10 @@
-import type { SVGProps } from "react";
+import type { IconProps } from "@zenncore/types/components";
 
-type IconProps = SVGProps<SVGSVGElement> & {
-  secondaryfill?: string;
-  strokewidth?: number;
-  title?: string;
-};
 
 export const ChartCircleIcon = ({ ...props }: IconProps) => {
   return (
-    <svg height="18" width="18" viewBox="0 0 18 18" {...props}>
-      <g>
+    <svg viewBox="0 0 18 18" height={24} width={24} {...props}>
+      <g fill="currentColor">
         <path
           d="M8.25 1.75C8.25 1.33579 8.58579 1 9 1C13.4182 1 17 4.58179 17 9C17 13.4182 13.4182 17 9 17C4.58179 17 1 13.4182 1 9C1 7.37009 1.48896 5.85076 2.32671 4.58587C2.55543 4.24053 3.02079 4.14599 3.36613 4.37471C3.71147 4.60343 3.80601 5.06879 3.57729 5.41413C2.89704 6.44124 2.5 7.67391 2.5 9C2.5 12.5898 5.41021 15.5 9 15.5C12.5898 15.5 15.5 12.5898 15.5 9C15.5 5.41021 12.5898 2.5 9 2.5C8.58579 2.5 8.25 2.16421 8.25 1.75Z"
           fillRule="evenodd"

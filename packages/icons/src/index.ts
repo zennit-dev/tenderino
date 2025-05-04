@@ -117,6 +117,7 @@ export * from "./chart-laptop";
 export * from "./chart-rose";
 export * from "./hospital";
 export * from "./content";
-export * from "./log-in";
+export * from "./continue";
 export * from "./ai";
 export * from "./flag";
+export * from "./theme";

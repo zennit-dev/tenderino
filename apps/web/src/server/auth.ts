@@ -45,14 +45,14 @@ export const signIn = async (
         },
       }
     );
-    const data = await response.json();
 
     if (!response.ok)
-      throw new Error(
-        `Sign in failed with status code: ${
-          response.status
-        } and message: ${JSON.stringify(data)}`
-      );
+      return {
+        success: false,
+        error: await response.text(),
+      };
+
+    const data = await response.json();
 
     await setRoleCookie(data.access);
     await setAuthenticationToken(data.token);

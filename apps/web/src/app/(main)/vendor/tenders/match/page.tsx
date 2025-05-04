@@ -1,12 +1,12 @@
 import { TenderCard } from "@/components/tender-card";
-import { paginate } from "@/server/tender";
+import { matchTenders, paginate } from "@/server/tender";
 import { unwrapResult } from "@zenncore/utils";
 import { FilterIcon, PlusCircleIcon } from "@zennui/icons";
 import { Button } from "@zennui/web/button";
 import { Input } from "@zennui/web/input";
 
 export default async () => {
-  const tenders = unwrapResult(await paginate(1));
+  const tenders = unwrapResult(await matchTenders());
   return (
     <div className="flex flex-col gap-4">
       <h1 className="text-3xl font-bold">All Tenders</h1>
@@ -22,7 +22,7 @@ export default async () => {
         {tenders.map((tender) => (
           <TenderCard
             key={tender.id}
-            href={`/evaluation/tenders/${tender.id}`}
+            href={`/vendor/tenders/${tender.id}`}
             {...tender}
             className="w-[calc(33%-theme(spacing.2))]"
           />

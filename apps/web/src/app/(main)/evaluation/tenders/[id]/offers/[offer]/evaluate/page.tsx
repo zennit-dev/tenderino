@@ -4,11 +4,11 @@ import { getById as getOfferById } from "@/server/application";
 import { getById as getTenderById } from "@/server/tender";
 import { unwrapResult } from "@zenncore/utils";
 
-export default async ({ params }: DynamicSegmentProps) => {
-  const { id } = await params;
+export default async ({ params }: DynamicSegmentProps<"offer">) => {
+  const { offer: id } = await params;
 
-  const offer = unwrapResult(await getOfferById(id));
-  const tender = unwrapResult(await getTenderById(offer.tenderId));
+  const application = unwrapResult(await getOfferById(id));
+  const tender = unwrapResult(await getTenderById(application.tender));
 
-  return <EvaluationForm tender={tender} offer={offer} />;
+  return <EvaluationForm tender={tender} application={application} />;
 };
