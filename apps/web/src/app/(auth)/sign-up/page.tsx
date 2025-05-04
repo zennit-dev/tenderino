@@ -1,5 +1,5 @@
 "use client";
-import { LogInIcon } from "@zennui/icons";
+import { ContinueIcon } from "@zennui/icons";
 import {
   FormSubmitButton,
   InferredForm,
@@ -25,7 +25,7 @@ export default () => {
   };
 
   const handleCredentialsSubmit = (
-    data: InferredFormFields<typeof credentials>,
+    data: InferredFormFields<typeof credentials>
   ) => {
     console.log(data);
     router.push("/");
@@ -61,7 +61,7 @@ export default () => {
                   color="primary"
                   className="flex items-center gap-2 mb-12"
                 >
-                  <LogInIcon />
+                  <ContinueIcon />
                   Continue into Credentials
                 </FormSubmitButton>
               </InferredForm>
@@ -72,7 +72,7 @@ export default () => {
                   color="primary"
                   className="flex items-center gap-2 mb-12"
                 >
-                  <LogInIcon />
+                  <ContinueIcon />
                   Register
                 </FormSubmitButton>
               </InferredForm>
@@ -86,7 +86,7 @@ export default () => {
                   color="primary"
                   className="flex items-center gap-2 mb-12"
                 >
-                  <LogInIcon />
+                  <ContinueIcon />
                   Continue into Contact Information
                 </FormSubmitButton>
               </InferredForm>

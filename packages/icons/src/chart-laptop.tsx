@@ -1,15 +1,9 @@
-import type { SVGProps } from "react";
-
-type IconProps = SVGProps<SVGSVGElement> & {
-  secondaryfill?: string;
-  strokewidth?: number;
-  title?: string;
-};
+import type { IconProps } from "@zenncore/types/components";
 
 export const LaptopChart = ({ ...props }: IconProps) => {
   return (
-    <svg height="18" width="18" viewBox="0 0 18 18" {...props}>
-      <g>
+    <svg viewBox="0 0 18 18" height={24} width={24} {...props}>
+      <g fill="currentColor">
         <path
           d="M4.25 2C2.73079 2 1.5 3.23079 1.5 4.75V12.75C1.5 14.2692 2.73079 15.5 4.25 15.5H13.75C15.2692 15.5 16.5 14.2692 16.5 12.75V4.75C16.5 3.23079 15.2692 2 13.75 2H4.25Z"
           fillOpacity=".4"

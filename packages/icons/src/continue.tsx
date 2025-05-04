@@ -1,6 +1,6 @@
 import type { IconProps } from "@zenncore/types/components";
 
-export const LogInIcon = (props: IconProps) => {
+export const ContinueIcon = (props: IconProps) => {
   return (
     <svg
       viewBox="0 0 18 18"

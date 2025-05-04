@@ -20,5 +20,8 @@ export default {
   },
   experimental: {
     useCache: true,
+    serverActions: {
+      bodySizeLimit: "50mb",
+    },
   },
 };

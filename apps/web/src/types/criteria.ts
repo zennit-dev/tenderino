@@ -1,7 +1,6 @@
 import type { Metadata } from "./metadata";
 
 export type Criteria = Metadata & {
-  name: string;
   type: CriteriaType;
   category: CriteriaCategory;
   description: string;
@@ -17,9 +16,9 @@ export type CriteriaType = (typeof CriteriaType)[keyof typeof CriteriaType];
 export const CRITERIA_TYPES = Object.values(CriteriaType);
 
 export const CriteriaCategory = {
-  QUALIFICATION: "Qualification",
+  EVALUATION: "Evaluation",
   APPLICATION: "Application",
-  ELIGIBILITY: "Eligibility",
+  QUALIFICATION: "Qualification",
 } as const;
 
 export type CriteriaCategory =

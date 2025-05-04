@@ -23,19 +23,22 @@ import type { Application } from "@/types/application";
 import { useRouter } from "next/navigation";
 import type { Tender } from "@/types/tender";
 import { create } from "@/server/evaluation";
+import { toast } from "sonner";
 
 export type EvaluationFormProps = {
   tender: Tender;
-  offer: Application;
+  application: Application;
 };
 
-export const EvaluationForm = ({ tender, offer }: EvaluationFormProps) => {
+export const EvaluationForm = ({
+  tender,
+  application,
+}: EvaluationFormProps) => {
   const config = Object.fromEntries(
-    tender.criteria.map(({ id, name, description }) => [
+    tender.criteria.map(({ id, description }) => [
       id,
       field({
-        label: name,
-        description,
+        label: description,
         shape: "slider",
         constraint: z.number(),
         min: 0,
@@ -51,17 +54,30 @@ export const EvaluationForm = ({ tender, offer }: EvaluationFormProps) => {
   const form = useInferredForm(config);
 
   const handleAIEvaluation = async () => {
-    const evaluation = await generateEvaluation(tender.criteria, offer);
+    const evaluation = await generateEvaluation(tender.criteria, application);
     for (const { id, score } of evaluation) {
       form.setValue(id, score);
     }
   };
 
   const handleSubmit = async (data: InferredFormFields<typeof config>) => {
-    const evaluation = await create({
-      applicationId: offer.id,
-      scores,
+    const result = await create({
+      application_id: application.id,
+      application: application.id,
+      scores: Object.entries(data).map(([id, value], index) => ({
+        criteria_id: application.criteria_completed[index]?.id ?? id,
+        score: value * 10,
+        feedback: "No comment",
+        is_document: false,
+      })),
+      notes: "No comment",
     });
+
+    if (!result.success) {
+      toast.error(result.error);
+      return;
+    }
+    router.push(`/evaluation/tenders/${tender.id}/offers/${application.id}`);
   };
   const router = useRouter();
 
@@ -79,7 +95,10 @@ export const EvaluationForm = ({ tender, offer }: EvaluationFormProps) => {
       <hr className="my-4 bg-border border-border text-border" />
       <div className="flex flex-col gap-4">
         <Form {...form}>
-          <form className={cn("flex flex-col gap-2.5")}>
+          <form
+            className={cn("flex flex-col gap-2.5")}
+            onSubmit={form.handleSubmit(handleSubmit)}
+          >
             {/** @ts-ignore */}
             {Object.entries(config).map(
               ([key, props]): ReactNode => (

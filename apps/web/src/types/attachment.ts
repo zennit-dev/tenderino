@@ -2,5 +2,6 @@ import type { Metadata } from "./metadata";
 
 export type Attachment = Metadata & {
   name: string;
-  url: string;
+  document_url: string;
+  uploaded_at: string;
 };

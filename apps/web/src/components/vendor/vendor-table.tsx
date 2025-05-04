@@ -12,7 +12,7 @@ type VendorTableProps = {
   buildColumns: (columnHelper: ColumnHelper<Vendor>) => ColumnDef<Vendor>[];
 };
 export const VendorTable = ({ buildColumns }: VendorTableProps) => {
-  const additions = buildColumns(column);
+  const additions = buildColumns?.(column) ?? [];
   return (
     <DataTableProvider columns={[...columns, ...additions]} rows={data}>
       <DataTable />

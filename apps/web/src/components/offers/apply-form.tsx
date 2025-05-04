@@ -1,30 +1,48 @@
 "use client";
 import type { Tender } from "@/types/tender";
-import { XIcon } from "@zennui/icons";
-import { field, InferredForm, type InferredFormFields } from "@zennui/web/form";
+import { ContinueIcon, XIcon } from "@zennui/icons";
+import {
+  field,
+  type FormConfig,
+  FormSubmitButton,
+  InferredForm,
+  type InferredFormFields,
+} from "@zennui/web/form";
 import { useRouter } from "next/navigation";
 import { z } from "zod";
 import { analyzeDocument, create } from "@/server/application";
 import { toast } from "sonner";
 import { resultify } from "@zenncore/utils";
+import { useTransition } from "react";
 
 type ApplyFormProps = Tender;
 
-export const ApplyForm = ({ criteria }: ApplyFormProps) => {
-  const config = Object.fromEntries(
-    criteria.map(({ id, name, description, type }) => [
-      id,
+export const ApplyForm = ({ criteria, id }: ApplyFormProps) => {
+  const config = Object.fromEntries([
+    [
+      "amount",
       field({
-        label: name,
-        description,
+        label: "Amount",
+        shape: "text",
+        constraint: z.coerce.number(),
+        placeholder: "Enter the amount",
+        description: "The amount of money you are applying for",
+      }),
+    ],
+    ...criteria.map(({ id, description, type }) => [
+      id.toString(),
+      field({
+        label: description,
         shape: type === "document" ? "file" : "text",
+        accept: type === "document" ? "application/pdf,image/*" : undefined,
         constraint:
           type === "document" ? z.array(z.instanceof(File)) : z.string(),
       }),
-    ])
-  );
+    ]),
+  ]) satisfies FormConfig;
 
   const router = useRouter();
+  const [isPending, startTransition] = useTransition();
 
   const handleSubmit = async (data: InferredFormFields<typeof config>) => {
     const documents = Object.entries(data).filter(
@@ -33,34 +51,64 @@ export const ApplyForm = ({ criteria }: ApplyFormProps) => {
     );
 
     const results = await Promise.all(
-      documents.map(([id, value]) =>
-        resultify(async () => {
-          const document = value[0] as File;
-          const description = criteria.find(
-            (c) => c.id.toString() === id
-          )?.description;
+      documents.map(async ([id, value]) => {
+        const document = value[0] as File;
+        const description = criteria.find(
+          (c) => c.id.toString() === id
+        )?.description;
 
-          if (!description) return;
+        if (!description) return;
 
-          const result = await analyzeDocument(document, description);
+        const result = await analyzeDocument(document, description);
 
-          if (!result.matches) {
-            toast.error(
-              `Please upload the required documents: ${description} does not match the document uploaded, ${result.explanation}`
-            );
-            throw new Error("Document does not match the required criteria");
-          }
-        })
-      )
+        if (!result.matches) {
+          toast.error(
+            `Please upload the required documents: ${description} does not match the document uploaded, ${result.explanation}`
+          );
+        }
+
+        return result.matches;
+      })
     );
 
-    const valid = results.every((r) => r.success);
+    console.log(results);
+    const valid = results.every((r) => r);
 
     if (!valid) return;
 
-    // const offer = await create({
-    //   tenderId: tender.id,
-    // });
+    const { amount, ...following } = data;
+
+    const content = Object.entries(following).filter(
+      ([, item]) => typeof item === "string"
+    );
+
+    const request = new FormData();
+
+    request.append(
+      "applicationData",
+      JSON.stringify({
+        tender: id,
+        amount,
+        criteria: content.map(([, value]) => ({
+          content: value,
+        })),
+      })
+    );
+
+    documents.forEach(([, value], index) => {
+      request.append(`document_criteria[${index}][document]`, value[0]);
+    });
+
+    const application = await create<FormData>(request);
+
+    if (!application.success) {
+      toast.error(application.error);
+      return;
+    }
+
+    toast.success("Application submitted successfully");
+
+    router.back();
   };
 
   return (
@@ -70,10 +118,18 @@ export const ApplyForm = ({ criteria }: ApplyFormProps) => {
           <h1 className="text-2xl font-bold">Apply for Tender</h1>
           <XIcon onClick={router.back} />
         </div>
-        <p className="text-sm text-muted-foreground">Apply for the tender.</p>
+        <p className="text-sm text-foreground-dimmed">Apply for the tender.</p>
       </div>
       <hr className="my-4 bg-border border-border text-border" />
-      <InferredForm config={config} onSubmit={handleSubmit} />
+      <InferredForm
+        config={config}
+        onSubmit={(data) => startTransition(() => handleSubmit(data))}
+      >
+        <FormSubmitButton disabled={isPending}>
+          <ContinueIcon />
+          {isPending ? "Applying..." : "Apply"}
+        </FormSubmitButton>
+      </InferredForm>
     </main>
   );
 };

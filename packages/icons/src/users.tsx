@@ -1,15 +1,8 @@
-import type { SVGProps } from "react";
-
-type IconProps = SVGProps<SVGSVGElement> & {
-  secondaryfill?: string;
-  strokewidth?: number;
-  title?: string;
-};
-
+import type { IconProps } from "@zenncore/types/components";
 export const UsersIcon = ({ ...props }: IconProps) => {
   return (
-    <svg height="18" width="18" viewBox="0 0 18 18" {...props}>
-      <g>
+    <svg viewBox="0 0 18 18" height={24} width={24} {...props}>
+      <g fill="currentColor">
         <path
           d="M1.4247 12.431C2.45321 10.3968 4.56094 8.99951 7 8.99951C9.43928 8.99951 11.5468 10.398 12.5752 12.431C13.1949 13.6563 12.5204 15.0968 11.2863 15.5259C10.1931 15.9055 8.732 16.2505 7 16.2505C5.268 16.2505 3.80712 15.9056 2.71397 15.526C1.47801 15.0968 0.805372 13.6559 1.4247 12.431Z"
           fillRule="evenodd"

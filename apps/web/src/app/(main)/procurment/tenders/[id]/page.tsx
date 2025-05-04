@@ -24,7 +24,7 @@ export default async ({ params }: DynamicSegmentProps) => {
   );
 
   const eligibility = tender.criteria.filter(
-    ({ category }) => category === CriteriaCategory.ELIGIBILITY
+    ({ category }) => category === CriteriaCategory.APPLICATION
   );
 
   return (
@@ -37,10 +37,6 @@ export default async ({ params }: DynamicSegmentProps) => {
               Reference Number: {tender.id}
             </h3>
           </div>
-          <Button color="primary" className="ml-auto">
-            Evaluate Offers
-          </Button>
-          <AIButton>AI Evaluation</AIButton>
         </div>
       </div>
       <div className="flex gap-4 px-4 h-full">
@@ -54,26 +50,24 @@ export default async ({ params }: DynamicSegmentProps) => {
             <div className="space-y-1">
               <h3 className="font-medium text-lg">Submission Requirements</h3>
               {application.length > 0 &&
-                application.map(({ id, name, description }) => (
+                application.map(({ id, description }) => (
                   <div key={id}>
                     <h2 className="flex gap-2 items-center text-foreground-dimmed">
                       <CircleCheckIcon className="fill-green-400" />
-                      {name}
+                      {description}
                     </h2>
-                    <p className="text-foreground-dimmed">{description}</p>
                   </div>
                 ))}
             </div>
             <div className="mt-2 space-y-1">
               <h3 className="font-medium text-lg">Eligibility Criteria</h3>
               {eligibility.length > 0 &&
-                eligibility.map(({ id, name, description }) => (
+                eligibility.map(({ id, description }) => (
                   <div key={id}>
                     <h2 className="flex gap-2 items-center text-foreground-dimmed">
                       <InfoIcon className="fill-red-400" />
-                      {name}
+                      {description}
                     </h2>
-                    <p className="text-foreground-dimmed">{description}</p>
                   </div>
                 ))}
             </div>
@@ -81,22 +75,24 @@ export default async ({ params }: DynamicSegmentProps) => {
           <div className="space-y-4">
             <h3 className="font-bold text-xl">Tender Documents</h3>
             <div className="flex flex-col gap-2 divide-y divide-border">
-              {tender.attachments.map(({ id, name, url }) => (
-                <div
-                  key={id}
-                  className="flex gap-2 items-center pb-2 text-foreground-dimmed"
-                >
-                  <FileContentIcon className="size-7 fill-blue-400" />
-                  <div>
-                    <p>{name}</p>
-                    <p className="text-foreground-dimmed text-sm">{url}</p>
+              {tender.tender_document.map(
+                ({ id, document_url: url, uploaded_at }) => (
+                  <div
+                    key={id}
+                    className="flex gap-2 items-center pb-2 text-foreground-dimmed"
+                  >
+                    <FileContentIcon className="size-7 fill-blue-400" />
+                    <div>
+                      <p>{format(uploaded_at, "dd MMM yyyy")}</p>
+                      <p className="text-foreground-dimmed text-sm">{url}</p>
+                    </div>
+                    <Button color="accent" className="ml-auto">
+                      <DownloadIcon className="fill-foreground-dimmed" />
+                      <p className="text-foreground-dimmed">Download</p>
+                    </Button>
                   </div>
-                  <Button color="accent" className="ml-auto">
-                    <DownloadIcon className="fill-foreground-dimmed" />
-                    <p className="text-foreground-dimmed">Download</p>
-                  </Button>
-                </div>
-              ))}
+                )
+              )}
             </div>
           </div>
         </div>

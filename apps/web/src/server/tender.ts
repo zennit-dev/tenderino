@@ -1,10 +1,11 @@
 "use server";
 import type { Tender } from "@/types/tender";
+import { withAuthorization } from "@/utils/auth";
 import { resource } from "@/utils/resource";
 import { OpenAI } from "openai";
 import { zodFunction } from "openai/helpers/zod";
 import { z } from "zod";
-
+import type { Result } from "@zenncore/types/utilities";
 const criteriaSchema = z.object({
   title: z.string(),
   description: z.string(),
@@ -15,7 +16,7 @@ const schema = z.object({
   criteria: z.array(criteriaSchema),
 });
 
-export const generateCriteria = async ({
+export const generateAADFCriteria = async ({
   title,
   description,
 }: {
@@ -23,12 +24,11 @@ export const generateCriteria = async ({
   description: string;
 }): Promise<z.infer<typeof criteriaSchema>[]> => {
   const client = new OpenAI({
-    apiKey:
-      "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",
+    apiKey: process.env.OPENAI_KEY,
   });
 
   const response = await client.beta.chat.completions.parse({
-    model: "gpt-4.1",
+    model: "gpt-3.5-turbo",
     messages: [
       {
         role: "system",
@@ -57,4 +57,93 @@ export const generateCriteria = async ({
   )?.criteria;
 };
 
+export const generateTenderCriteria = async ({
+  title,
+  description,
+}: {
+  title: string;
+  description: string;
+}): Promise<z.infer<typeof criteriaSchema>[]> => {
+  const client = new OpenAI({
+    apiKey: process.env.OPENAI_KEY,
+  });
+
+  const response = await client.beta.chat.completions.parse({
+    model: "gpt-3.5-turbo",
+    messages: [
+      {
+        role: "system",
+        content:
+          "Generate a list of criteria for a tender. Each criterion should follow this format:\n" +
+          "- title: A clear, concise name for the criterion\n" +
+          "- description: A specific, measurable requirement or condition\n" +
+          "- weight: A number between 1-100 representing the importance of this criterion\n\n" +
+          "Examples of good criteria:\n" +
+          "1. Number of employees: 20\n" +
+          "2. Number of suppliers: 10\n\n",
+      },
+      {
+        role: "user",
+        content: `The tenders theme is ${title} and the description is ${description}`,
+      },
+    ],
+    tools: [zodFunction({ parameters: schema, name: "generateCriteria" })],
+  });
+
+  return (
+    response.choices[0]?.message.tool_calls?.[0]?.function
+      .parsed_arguments as z.infer<typeof schema>
+  )?.criteria;
+};
+
 export const { getById, create, paginate } = resource<Tender>("/tenders");
+
+const tenderSchema = z.object({
+  id: z.number(),
+  title: z.string(),
+  description: z.string(),
+  criteria: z.array(criteriaSchema),
+});
+
+const matchTendersSchema = z.object({
+  tenders: z.array(tenderSchema),
+});
+
+export const matchTenders = withAuthorization(
+  async (authorization): Promise<Result<z.infer<typeof tenderSchema>[]>> => {
+    const tenders = await paginate(1);
+
+    if (!tenders.success) {
+      return { success: false, error: tenders.error };
+    }
+
+    const client = new OpenAI({
+      apiKey: process.env.OPENAI_KEY,
+    });
+
+    const response = await client.beta.chat.completions.parse({
+      model: "gpt-3.5-turbo",
+      messages: [
+        {
+          role: "system",
+          content:
+            "You are a helpful assistant that matches tenders to the user's profile.",
+        },
+        {
+          role: "user",
+          content: `Here are the tenders: ${JSON.stringify(tenders.data)}`,
+        },
+      ],
+      tools: [
+        zodFunction({ parameters: matchTendersSchema, name: "matchTenders" }),
+      ],
+    });
+
+    const data = (
+      response.choices[0]?.message.tool_calls?.[0]?.function
+        .parsed_arguments as z.infer<typeof matchTendersSchema>
+    )?.tenders;
+
+    return { success: true, data };
+  }
+);

@@ -1,6 +1,6 @@
 "use client";
 import { signIn } from "@/server/auth";
-import { LogInIcon } from "@zennui/icons";
+import { ContinueIcon } from "@zennui/icons";
 import {
   FormSubmitButton,
   InferredForm,
@@ -55,7 +55,7 @@ export default () => {
         </div>
         <InferredForm config={config} onSubmit={handleSubmit}>
           <FormSubmitButton color="primary" className="flex items-center gap-2">
-            <LogInIcon />
+            <ContinueIcon />
             Sign in
           </FormSubmitButton>
         </InferredForm>

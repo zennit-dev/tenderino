@@ -19,7 +19,7 @@ urlpatterns += [
     path("admin/", admin.site.urls),
     path("accounts/", include("accounts.urls")),
     path("", include("application.urls")),
-    path("api/tenders/", include("tenders.urls")),
+    path("", include("tenders.urls")),
     # Documentation API
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
     path(

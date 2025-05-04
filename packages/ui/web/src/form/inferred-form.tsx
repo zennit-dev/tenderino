@@ -1,9 +1,7 @@
-"use client";
 import type { UseInferredFormWithHideField } from "@zenncore/components/form";
 import { cn } from "@zenncore/utils";
-import { type ReactNode, useEffect } from "react";
+import { useEffect, type ReactNode } from "react";
 import type { UseFormReturn } from "react-hook-form";
-import type * as z from "zod";
 import {
   Form,
   type FormConfig,
@@ -14,18 +12,19 @@ import {
   useInferredForm,
 } from ".";
 import { Button, type ButtonProps } from "../button";
+import type * as z from "zod";
 
 export type InferredFormProps<
   T extends FormConfig,
-  S extends z.ZodSchema = z.ZodSchema<InferredFormFields<T>>,
+  S extends z.ZodSchema = z.ZodSchema<InferredFormFields<T>>
 > = {
   onSubmit?: (
     data: InferredFormFields<T>,
-    form: UseFormReturn<InferredFormFields<T>>,
+    form: UseFormReturn<InferredFormFields<T>>
   ) => void | Promise<void>;
   onChange?: (
     data: InferredFormFields<T>,
-    form: UseFormReturn<InferredFormFields<T>>,
+    form: UseFormReturn<InferredFormFields<T>>
   ) => void | Promise<void>;
   config: UseInferredFormParams<T>[0];
   defaultValues?: NonNullable<UseInferredFormParams<T>[1]>["defaultValues"];
@@ -35,14 +34,14 @@ export type InferredFormProps<
   className?: string;
   shouldHideFormField?: (
     fieldName: keyof T,
-    data: InferredFormFields<T>,
+    data: InferredFormFields<T>
   ) => boolean;
   extend?: (schema: z.ZodSchema<InferredFormFields<T>>) => S;
 };
 
 export const InferredForm = <
   T extends FormConfig,
-  S extends z.ZodSchema = z.ZodSchema<InferredFormFields<T>>,
+  S extends z.ZodSchema = z.ZodSchema<InferredFormFields<T>>
 >({
   config,
   onSubmit,
@@ -61,28 +60,21 @@ export const InferredForm = <
     ...props,
   });
 
+  console.log(form.formState.errors);
+
   const handleFormSubmit = form.handleSubmit((data) => onSubmit?.(data, form));
-  // only handle form change if onChange is provided
-  const handleFormChange = onChange
-    ? form.handleSubmit((data) => onChange(data, form))
-    : undefined;
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: should run only on mount
   useEffect(() => {
-    if (!onChange) return;
-
-    const { unsubscribe } = form.watch(
-      form.handleSubmit((data) => onChange(data, form)),
-    );
-
+    const { unsubscribe } = form.watch((data) => onChange?.(data, form));
     return unsubscribe;
-  }, [onChange]);
+  }, []);
+
   return (
     <Form {...form}>
       <form
         className={cn("flex flex-col gap-2.5", className)}
         onSubmit={handleFormSubmit}
-        onChange={handleFormChange}
+        // onChange={handleFormChange}
       >
         {Object.entries(config).map(([key, field]) => {
           type InferredFieldProps = InferredFormControlProps<
@@ -102,9 +94,7 @@ export const InferredForm = <
             />
           );
         })}
-        {children && (
-          <div className={"flex w-full justify-end"}>{children}</div>
-        )}
+        <div className={"flex w-full justify-end"}>{children}</div>
       </form>
     </Form>
   );
@@ -112,7 +102,7 @@ export const InferredForm = <
 
 export const FormSubmitButton = ({
   variant = "default",
-  color = "emphasis",
+  color = "primary",
   children,
   ...props
 }: ButtonProps) => {

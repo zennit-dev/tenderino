@@ -7,9 +7,11 @@ import {
   LogOutIcon,
   SettingsIcon,
   ShopIcon,
+  ThemeIcon,
   UsersIcon,
 } from "@zennui/icons";
 import { motion } from "motion/react";
+import { useTheme } from "next-themes";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -20,35 +22,42 @@ export const SidePanel = () => {
   const pathname = usePathname();
   const [_, role] = pathname.split("/");
 
+  const { theme, setTheme } = useTheme();
+
   const links =
     role === "vendor"
       ? [
           {
+            label: "Dashboard",
+            href: `/${role}`,
+            icon: <ChartCircleIcon className="h-5 w-5 shrink-0 text-neutral" />,
+          },
+          {
             label: "Tenders",
             href: `/${role}/tenders`,
-            icon: <ShopIcon className="h-5 w-5 shrink-0" />,
+            icon: <ShopIcon className="h-5 w-5 shrink-0 text-neutral" />,
           },
         ]
       : [
           {
             label: "Dashboard",
             href: `/${role}`,
-            icon: <ChartCircleIcon className="h-5 w-5 shrink-0" />,
+            icon: <ChartCircleIcon className="h-5 w-5 shrink-0 text-neutral" />,
           },
           {
             label: "Tenders",
             href: `/${role}/tenders`,
-            icon: <ShopIcon className="h-5 w-5 shrink-0" />,
+            icon: <ShopIcon className="h-5 w-5 shrink-0 text-neutral" />,
           },
           {
             label: "Vendor",
             href: `/${role}/vendors`,
-            icon: <UsersIcon className="h-5 w-5 shrink-0" />,
+            icon: <UsersIcon className="h-5 w-5 shrink-0 text-neutral" />,
           },
           {
             label: "Settings",
             href: "#",
-            icon: <SettingsIcon className="h-5 w-5 shrink-0" />,
+            icon: <SettingsIcon className="h-5 w-5 shrink-0 text-neutral" />,
           },
         ];
 
@@ -66,9 +75,21 @@ export const SidePanel = () => {
         <div>
           <SidebarLink
             link={{
+              label: "Theme",
+              href: "#",
+              icon: (
+                <ThemeIcon
+                  className="text-neutral"
+                  onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                />
+              ),
+            }}
+          />
+          <SidebarLink
+            link={{
               label: "Sign Out",
               href: "#",
-              icon: <LogOutIcon />,
+              icon: <LogOutIcon className="text-error-dimmed" />,
             }}
           />
           <SidebarLink
@@ -95,7 +116,7 @@ export const Logo = () => {
   return (
     <Link
       href="/"
-      className="relative z-20 flex items-center space-x-2 py-1 text-sm font-normal text-black"
+      className="relative z-20 flex items-center space-x-2 py-1 text-sm font-normal text-foreground"
     >
       <Image
         src="/images/logo.png"
@@ -110,7 +131,7 @@ export const Logo = () => {
         transition={{
           duration: 1,
         }}
-        className="font-medium whitespace-pre text-black"
+        className="font-medium whitespace-pre text-foreground"
       >
         AADF
       </motion.span>

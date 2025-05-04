@@ -1,5 +1,5 @@
 "use client";
-import { FlagIcon, LogInIcon, XIcon } from "@zennui/icons";
+import { FlagIcon, ContinueIcon, XIcon } from "@zennui/icons";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@zennui/web/tabs";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -8,11 +8,13 @@ import Link from "next/link";
 import { Progress } from "@zennui/web/progress";
 import type { Application } from "@/types/application";
 
-export const ApplicationsTable = () => {
+type ApplicationsTableProps = {
+  applications: Application[];
+};
+
+export const ApplicationsTable = ({ applications }: ApplicationsTableProps) => {
   const router = useRouter();
   const [active, setActive] = useState("offers");
-
-  const winner = offers.sort((a, b) => b.score - a.score)[0];
 
   return (
     <section className="size-full">
@@ -32,34 +34,40 @@ export const ApplicationsTable = () => {
           <TabsTrigger value="rankings">Rankings</TabsTrigger>
         </TabsList>
         <TabsContent value="offers" className="flex flex-col gap-4">
-          {offers.map((offer) => (
+          {applications.map((application) => (
             <div
-              key={offer.id}
+              key={application.id}
               className="flex items-center gap-2 rounded-lg bg-accent p-4"
             >
               <div className="aspect-square object-cover size-16 relative overflow-hidden">
                 <Image
-                  src={offer.logo}
-                  alt={offer.name}
+                  src={"/images/logo.png"}
                   fill
                   className="object-cover"
+                  alt="logo"
                 />
               </div>
               <div className="flex flex-col gap-1">
-                <h2 className="text-lg">{offer.name}</h2>
+                <h2 className="text-lg">{application.applicant.name}</h2>
               </div>
 
-              {offer.isEvaluated ? (
+              {application.evaluation ? (
                 <h3 className="flex items-center gap-2 text-success whitespace-nowrap ml-auto">
                   <FlagIcon />
-                  <span>{offer.score} / 100</span>
+                  <span>
+                    {application.evaluation.scores.reduce(
+                      (acc, curr) => acc + curr.score,
+                      0
+                    ) / application.evaluation.scores.length}{" "}
+                    / 100
+                  </span>
                 </h3>
               ) : (
                 <Link
-                  href={`/evaluation/offers/${offer.id}/evaluate`}
+                  href={`/evaluation/tenders/${application.tender}/offers/${application.id}/evaluate`}
                   className="ml-auto"
                 >
-                  <LogInIcon />
+                  <ContinueIcon />
                 </Link>
               )}
             </div>
@@ -80,30 +88,38 @@ export const ApplicationsTable = () => {
               <h2>{winner.name}</h2>
             </div> 
           )} */}
-          {offers
-            .filter((company) => company.isEvaluated)
-            .map((offer) => (
-              <div className="flex flex-col gap-2" key={offer.id}>
+          {applications
+            .filter((application) => application.evaluation)
+            .map((application) => (
+              <div className="flex flex-col gap-2" key={application.id}>
                 <div className="flex items-center gap-2 px-4">
                   <div className="aspect-square object-cover size-16 relative overflow-hidden">
                     <Image
-                      src={offer.logo}
-                      alt={offer.name}
+                      src={"/images/logo.png"}
                       fill
                       className="object-cover"
+                      alt="logo"
                     />
                   </div>
                   <div className="flex flex-col gap-1">
-                    <h2 className="text-lg">{offer.name}</h2>
-                    <p className="text-sm text-muted-foreground">
-                      {offer.description}
-                    </p>
+                    <h2 className="text-lg">{application.applicant.name}</h2>
                   </div>
                   <div className="ml-auto whitespace-nowrap">
-                    {offer.score} / 100
+                    {application.evaluation!.scores.reduce(
+                      (acc, curr) => acc + curr.score,
+                      0
+                    ) / application.evaluation!.scores.length}{" "}
+                    / 100
                   </div>
                 </div>
-                <Progress value={offer.score} key={offer.id} />
+                <Progress
+                  value={
+                    application.evaluation!.scores.reduce(
+                      (acc, curr) => acc + curr.score,
+                      0
+                    ) / application.evaluation!.scores.length
+                  }
+                />
               </div>
             ))}
         </TabsContent>
@@ -111,39 +127,3 @@ export const ApplicationsTable = () => {
     </section>
   );
 };
-
-const offers: Application[] = [
-  {
-    id: 1,
-    name: "Company 1",
-    logo: "/images/logo-full.png",
-    description: "We are a company that provides services to the public.",
-    score: 10,
-    isEvaluated: false,
-    attachments: [
-      {
-        id: 1,
-        name: "Attachment 1",
-        url: "https://via.placeholder.com/150",
-      },
-    ],
-    inquiry: "Inquiry 1",
-  },
-
-  {
-    id: 2,
-    name: "Company 2",
-    logo: "/images/logo-full.png",
-    description: "We are a company that provides services to the public.",
-    score: 10,
-    isEvaluated: true,
-    attachments: [
-      {
-        id: 1,
-        name: "Attachment 1",
-        url: "https://via.placeholder.com/150",
-      },
-    ],
-    inquiry: "Inquiry 1",
-  },
-];

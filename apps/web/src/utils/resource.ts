@@ -1,8 +1,11 @@
 import type { EmptyObject, UniqueIdentifier } from "@zenncore/types";
 import type { BetterOmit, Result } from "@zenncore/types/utilities";
-import { cacheTag } from "next/dist/server/use-cache/cache-tag";
 import { withAuthorization } from "./auth";
 import type { Metadata } from "@/types/metadata";
+import {
+  unstable_cacheTag as cacheTag,
+  unstable_expireTag as expireTag,
+} from "next/cache";
 
 type DeepOmitMetadata<T> = Omit<
   {
@@ -22,10 +25,10 @@ export const resource = <T extends EmptyObject>(resource: string) => {
     getById: withAuthorization(
       async (authorization, id: UniqueIdentifier): Promise<Result<T>> => {
         "use cache";
-        cacheTag(resource, id);
+        cacheTag(resource, `${resource}:${id}`);
         try {
           const response = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/${resource}/${id}`,
+            `${process.env.NEXT_PUBLIC_API_URL}/${resource}/${id}/`,
             {
               method: "GET",
               headers: {
@@ -58,14 +61,14 @@ export const resource = <T extends EmptyObject>(resource: string) => {
     paginate: withAuthorization(
       async (authorization, page: number): Promise<Result<T[]>> => {
         "use cache";
-        cacheTag(resource, page.toString());
+        cacheTag(resource, `${resource}:page:${page}`);
         try {
           const response = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/${resource}?page=${page}`,
+            `${process.env.NEXT_PUBLIC_API_URL}/${resource}/?page=${page}`,
             {
               method: "GET",
               headers: {
-                Authorization: authorization,
+                Authorization: `Token ${authorization}`,
                 "Content-Type": "application/json",
               },
             }
@@ -82,7 +85,7 @@ export const resource = <T extends EmptyObject>(resource: string) => {
 
           return {
             success: true,
-            data,
+            data: data.results,
           };
         } catch (error) {
           return {
@@ -92,32 +95,42 @@ export const resource = <T extends EmptyObject>(resource: string) => {
         }
       }
     ),
-    create: <O = DeepOmitMetadata<T>>(data: O) =>
+    create: <O = DeepOmitMetadata<T>>(
+      data: O,
+      headers?: Record<string, string>
+    ) =>
       withAuthorization(async (authorization, data: O): Promise<Result> => {
         try {
           const response = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/${resource}`,
+            `${process.env.NEXT_PUBLIC_API_URL}/${resource}/`,
             {
               method: "POST",
               headers: {
-                Authorization: authorization,
-                "Content-Type": "application/json",
+                Authorization: `Token ${authorization}`,
+                ...(data instanceof FormData
+                  ? {}
+                  : { "Content-Type": "application/json" }),
+                ...headers,
               },
-              body: JSON.stringify(data),
+              body: data instanceof FormData ? data : JSON.stringify(data),
             }
           );
 
           if (!response.ok) {
+            const errorText = await response.text();
+            console.log("Server error:", errorText);
             return {
               success: false,
               error: "Failed to create resource",
             };
           }
 
+          expireTag(resource);
           return {
             success: true,
           };
         } catch (error) {
+          console.log(error);
           return {
             success: false,
             error: "Failed to create resource",
@@ -133,7 +146,7 @@ export const resource = <T extends EmptyObject>(resource: string) => {
         ): Promise<Result> => {
           try {
             const response = await fetch(
-              `${process.env.NEXT_PUBLIC_API_URL}/${resource}/${id}`,
+              `${process.env.NEXT_PUBLIC_API_URL}/${resource}/${id}/`,
               {
                 method: "PUT",
                 headers: {
@@ -151,6 +164,8 @@ export const resource = <T extends EmptyObject>(resource: string) => {
               };
             }
 
+            expireTag(resource);
+            expireTag(`${resource}:${id}`);
             return {
               success: true,
             };
@@ -171,7 +186,7 @@ export const resource = <T extends EmptyObject>(resource: string) => {
         ): Promise<Result> => {
           try {
             const response = await fetch(
-              `${process.env.NEXT_PUBLIC_API_URL}/${resource}/${id}`,
+              `${process.env.NEXT_PUBLIC_API_URL}/${resource}/${id}/`,
               {
                 method: "PUT",
                 headers: {
@@ -189,6 +204,8 @@ export const resource = <T extends EmptyObject>(resource: string) => {
               };
             }
 
+            expireTag(resource);
+            expireTag(`${resource}:${id}`);
             return {
               success: true,
             };
@@ -204,7 +221,7 @@ export const resource = <T extends EmptyObject>(resource: string) => {
       async (authorization, id: UniqueIdentifier): Promise<Result> => {
         try {
           const response = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/${resource}/${id}`,
+            `${process.env.NEXT_PUBLIC_API_URL}/${resource}/${id}/`,
             {
               method: "DELETE",
               headers: {
@@ -221,6 +238,7 @@ export const resource = <T extends EmptyObject>(resource: string) => {
             };
           }
 
+          expireTag(resource);
           return {
             success: true,
           };

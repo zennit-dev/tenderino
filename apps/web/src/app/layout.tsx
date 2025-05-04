@@ -1,7 +1,8 @@
 import "./globals.css";
-
 import { cn } from "@zenncore/utils";
 import type { LayoutProps } from "@zenncore/types/navigation";
+import { Toaster } from "@zennui/web/toaster";
+import { ThemeProvider } from "next-themes";
 
 export default ({ children }: LayoutProps) => {
   return (
@@ -16,7 +17,15 @@ export default ({ children }: LayoutProps) => {
           "h-screen min-h-screen w-screen bg-accent font-sans text-foreground"
         )}
       >
-        {children}
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <Toaster />
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );
