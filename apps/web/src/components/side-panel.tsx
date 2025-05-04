@@ -3,7 +3,9 @@
 import { Sidebar, SidebarBody, SidebarLink } from "@/components/sidebar";
 import {
   ArrowLeftIcon,
+  CallIcon,
   ChartCircleIcon,
+  EditIcon,
   LogOutIcon,
   SettingsIcon,
   ShopIcon,
@@ -53,6 +55,16 @@ export const SidePanel = () => {
             label: "Vendor",
             href: `/${role}/vendors`,
             icon: <UsersIcon className="h-5 w-5 shrink-0 text-neutral" />,
+          },
+          {
+            label: "Conference",
+            href: `/evaluation/conference`,
+            icon: <CallIcon className="h-5 w-5 shrink-0 text-neutral" />,
+          },
+          {
+            label: "Board",
+            href: `/evaluation/conference`,
+            icon: <EditIcon className="h-5 w-5 shrink-0 text-neutral" />,
           },
           {
             label: "Settings",

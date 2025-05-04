@@ -24,7 +24,7 @@ export default async ({ params }: DynamicSegmentProps) => {
   );
 
   const eligibility = tender.criteria.filter(
-    ({ category }) => category === CriteriaCategory.APPLICATION
+    ({ category }) => category === CriteriaCategory.EVALUATION
   );
 
   return (

@@ -9,8 +9,8 @@ export const getRoomParams = async (room: string): Promise<Result<string>> => {
       process.env.LIVEKIT_API_KEY,
       process.env.LIVEKIT_API_SECRET,
       {
-        identity: "xhurixhuri@gmail.com",
-      },
+        identity: "admin@gmail.com",
+      }
     );
     at.addGrant({ room, roomJoin: true, canPublish: true, canSubscribe: true });
 
