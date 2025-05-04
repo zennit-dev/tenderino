@@ -1,5 +1,5 @@
-import { getRoomParams } from "@/actions/conference";
 import { Room } from "@/components/room";
+import { getRoomParams } from "@/server/conference";
 import { connection } from "next/server";
 
 export type DynamicRouteProps<T extends string = "id"> = {
