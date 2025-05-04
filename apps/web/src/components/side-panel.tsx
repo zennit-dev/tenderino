@@ -63,7 +63,7 @@ export const SidePanel = () => {
           },
           {
             label: "Board",
-            href: `/evaluation/conference`,
+            href: `/evaluation/board`,
             icon: <EditIcon className="h-5 w-5 shrink-0 text-neutral" />,
           },
           {
