@@ -108,7 +108,6 @@ export const ApplyForm = ({ criteria, id }: ApplyFormProps) => {
 
     toast.success("Application submitted successfully");
 
-    console.log(request);
     router.back();
   };
 
